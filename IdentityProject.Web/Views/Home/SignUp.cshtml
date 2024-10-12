@@ -1,0 +1,53 @@
+﻿
+@{
+    ViewData["Title"] = "SignUp";
+}
+
+@model SignUpViewModel
+
+<div class="row">
+
+
+<div class="col-md-6 offset-md-3" > @* Ekran 12'ye bölünür 6 lık kısım kullanılır sağdan ve soldan 3 birim boşluk bırakır *@
+     <h2 class="col-md-4 offset-md-4">Kayıt ol</h2> <br />
+    <form>
+            <div class="row mb-3">
+                <label for="UserName" class="col-md-4 col-form-label" asp-for="UserName"></label>
+                <div class="col-md-8">
+                    <input asp-for="UserName" class="form-control">
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <label for="Email" class="col-md-4 col-form-label" asp-for="Email"></label>
+                <div class="col-md-8">
+                    <input asp-for="Email" class="form-control">
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <label for="PhoneNumber" class="col-md-4 col-form-label" asp-for="PhoneNumber"></label>
+                <div class="col-md-8">
+                    <input asp-for="PhoneNumber" class="form-control">
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <label for="Password" class="col-md-4 col-form-label" asp-for="Password"></label>
+                <div class="col-md-8">
+                    <input asp-for="Password" class="form-control">
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <label for="PasswordConfirm" class="col-md-4 col-form-label" asp-for="PasswordConfirm"></label>
+                <div class="col-md-8">
+                    <input asp-for="PasswordConfirm" class="form-control">
+                </div>
+            </div>
+
+
+            <button type="submit" class="btn btn-primary">Kayıt Ol</button>
+	</form>
+	</div>
+</div>

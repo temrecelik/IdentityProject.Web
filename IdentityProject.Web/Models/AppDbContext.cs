@@ -7,9 +7,9 @@ namespace IdentityProject.Web.Models
     /*IdentityDbContext kullanılırken bir adet user ve role entity'si verilir.Girilen string değeri id değeri için guid değeri 
       stringe çevirir.
     */
-    public class DbContext : IdentityDbContext<User, Role, string>
+    public class AppDbContext : IdentityDbContext<User, Role, string>
     {
-        public DbContext(DbContextOptions<DbContext> options):base(options)
+        public AppDbContext(DbContextOptions<AppDbContext> options):base(options)
         {
         }
     }
