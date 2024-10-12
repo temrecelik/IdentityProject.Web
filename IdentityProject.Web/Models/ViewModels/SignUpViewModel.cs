@@ -4,7 +4,17 @@ namespace IdentityProject.Web.Models.ViewModels
 {
     public class SignUpViewModel
     {
-        
+        public SignUpViewModel() { }
+
+        public SignUpViewModel(string userName, string email, string phoneNumber, string password, string passwordConfirm)
+        {
+            UserName = userName;
+            Email = email;
+            PhoneNumber = phoneNumber;
+            Password = password;
+            PasswordConfirm = passwordConfirm;
+        }
+
         [Display(Name = "Kullanıcı Adı: ")] //view tarafında asp-for ile bu stringlere ulaşılabilir.
 
         public string UserName { get; set; }

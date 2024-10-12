@@ -10,7 +10,14 @@
 
 <div class="col-md-6 offset-md-3" > @* Ekran 12'ye bölünür 6 lık kısım kullanılır sağdan ve soldan 3 birim boşluk bırakır *@
      <h2 class="col-md-4 offset-md-4">Kayıt ol</h2> <br />
-    <form>
+
+        @if (!string.IsNullOrEmpty(ViewBag.SuccessMessage))
+        {
+            <div class="alert alert-success" role="alert">
+                @ViewBag.SuccessMessage
+            </div>
+        }
+        <form asp-controller="home" asp-action="SignUp" method="post">
             <div class="row mb-3">
                 <label for="UserName" class="col-md-4 col-form-label" asp-for="UserName"></label>
                 <div class="col-md-8">

@@ -31,6 +31,6 @@ namespace IdentityProject.Web.Models.Entities
 {
     public class User : IdentityUser
     {
-        public string City { get; set; }
+      
     }
 }
