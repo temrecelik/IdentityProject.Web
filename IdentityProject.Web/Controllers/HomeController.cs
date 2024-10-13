@@ -29,6 +29,7 @@ namespace IdentityProject.Web.Controllers
             return View();
         }
 
+       
         public IActionResult SignUp()
         {
             return View();
@@ -37,6 +38,13 @@ namespace IdentityProject.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> SignUp(SignUpViewModel signUpViewModel)
         {
+            if (!ModelState.IsValid)
+            {
+                return View();
+                
+            }
+
+
             //itentity kütüphanesi ile createAsync direkt olarak database oluşturulan kaydı ekler.
             var identityResult = await _UserManager.CreateAsync(
                 new()
@@ -47,16 +55,22 @@ namespace IdentityProject.Web.Controllers
                 }
                 , signUpViewModel.Password);
 
+
             if (identityResult.Succeeded)
             {
-                ViewBag.SuccessMessage = "Kayıt işlemi başarılı.";
-                return View();
+                //Temp Data ile Mesaj SignUp'ın Get haline taşınabilmektedir.
+                TempData["SuccessMessage"] = "Kayıt işlemi başarılı.";
+
+                return RedirectToAction(nameof(HomeController.SignUp)); 
             }
+          
 
             foreach (IdentityError item in identityResult.Errors)
             {
                 ModelState.AddModelError(string.Empty, item.Description);
-
+                /*model state'e identity'nin kendi hataları eklenir Vieew tarafında asp-validation-summary="ModelOnly" ile 
+                bu hatalar yazdırılır.Viewmodeldaki kendi belirlediğimiz validationlar ise ModelOnly  seçili olduğu için 
+                burada çıkmaz all dersek çıkar. */
             }
             return View();
         }

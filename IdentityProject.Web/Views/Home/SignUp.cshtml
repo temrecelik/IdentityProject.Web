@@ -11,17 +11,25 @@
 <div class="col-md-6 offset-md-3" > @* Ekran 12'ye bölünür 6 lık kısım kullanılır sağdan ve soldan 3 birim boşluk bırakır *@
      <h2 class="col-md-4 offset-md-4">Kayıt ol</h2> <br />
 
-        @if (!string.IsNullOrEmpty(ViewBag.SuccessMessage))
+        @if (TempData["SuccessMessage"] != null)
         {
             <div class="alert alert-success" role="alert">
-                @ViewBag.SuccessMessage
+                @TempData["SuccessMessage"]
+                
             </div>
         }
+        <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert">
+                        
+        </div>
+
+
+
         <form asp-controller="home" asp-action="SignUp" method="post">
             <div class="row mb-3">
                 <label for="UserName" class="col-md-4 col-form-label" asp-for="UserName"></label>
                 <div class="col-md-8">
                     <input asp-for="UserName" class="form-control">
+                    <span asp-validation-for="UserName" class="text-danger"></span>
                 </div>
             </div>
 
@@ -29,6 +37,7 @@
                 <label for="Email" class="col-md-4 col-form-label" asp-for="Email"></label>
                 <div class="col-md-8">
                     <input asp-for="Email" class="form-control">
+                    <span asp-validation-for="Email" class="text-danger"></span>
                 </div>
             </div>
 
@@ -36,6 +45,7 @@
                 <label for="PhoneNumber" class="col-md-4 col-form-label" asp-for="PhoneNumber"></label>
                 <div class="col-md-8">
                     <input asp-for="PhoneNumber" class="form-control">
+                    <span asp-validation-for="PhoneNumber" class="text-danger"></span>
                 </div>
             </div>
 
@@ -43,6 +53,7 @@
                 <label for="Password" class="col-md-4 col-form-label" asp-for="Password"></label>
                 <div class="col-md-8">
                     <input asp-for="Password" class="form-control">
+                    <span asp-validation-for="Password" class="text-danger"></span>
                 </div>
             </div>
 
@@ -50,6 +61,7 @@
                 <label for="PasswordConfirm" class="col-md-4 col-form-label" asp-for="PasswordConfirm"></label>
                 <div class="col-md-8">
                     <input asp-for="PasswordConfirm" class="form-control">
+                    <span asp-validation-for="PasswordConfirm" class="text-danger"></span>
                 </div>
             </div>
 
