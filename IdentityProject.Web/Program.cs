@@ -1,5 +1,7 @@
+using IdentityProject.Web.Extensions;
 using IdentityProject.Web.Models;
 using IdentityProject.Web.Models.Entities;
+using Microsoft.CodeAnalysis.Operations;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,7 +15,14 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 }
 );
 
-builder.Services.AddIdentity<User,Role>().AddEntityFrameworkStores<AppDbContext>();
+/*Ýdentity ile ekleme iþlemi yapýlýrken kullanýlacak rules'lar burada ayarlanabilir.Bir Extention klasörü oluþturup burada 
+  static bir class tanýmladýktan sonra  oluþturulan static methoda IServiceCollection türünden bir parametre vererek
+  bu methoda servis ekleyebiliriz.
+*/
+builder.Services.AddIdentityWithExt();
+
+
+
 
 var app = builder.Build();
 

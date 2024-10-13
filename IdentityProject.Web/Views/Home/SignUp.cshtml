@@ -5,6 +5,18 @@
 
 @model SignUpViewModel
 
+<!--
+    Bu işlem ile view modeldaki validationlar buton clicklenmeden yani backend gitmeden client taraflı  çalışır! 
+    Burada _ValidationScriptsPartia partial viewi ekrana yükleniyor bundanda temel validation işlemlerinin tutulduğu
+    scriptlar var.
+
+-->
+@section Scripts
+{
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}
+
+
 <div class="row">
 
 
