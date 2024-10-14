@@ -22,18 +22,18 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="SignUp">Kayıt Ol</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="SignIn">Giriş Yap</a>
-                        </li>
-                    </ul>
+					</ul>
+                       <!--Partial view shared içindeyse direkt adı yazılabilir ancak başka klasörde ise path ile beraber
+                           sonuna cshtml konulmalıdır
+                       -->
+					<partial name="_NavbarLoginPartial"/>
+
                 </div>
             </div>
         </nav>
     </header>
     <div class="container">
+        <main role="main" class="pb-3">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>

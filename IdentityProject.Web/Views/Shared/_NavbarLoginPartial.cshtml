@@ -1,0 +1,38 @@
+﻿
+@{
+    ViewData["Title"] = "_NavbarLoginPartial";
+}
+
+<!--
+                        Kullanıcı oturum açmışsa yani kayıtlı bir cookie var ise bu kod çalışır yoksa else kısmındaki kod çalışır
+                    -->
+@if (User.Identity!.IsAuthenticated)
+{
+    <ul class="navbar-nav me-0">
+
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                @User.Identity.Name
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                <li><a class="dropdown-item" asp-controller="Member" asp-action="LogOut">Çıkış Yap</a></li>
+
+            </ul>
+        </li>
+
+    </ul>
+}
+else
+{
+    <ul class="navbar-nav ml-auto d-flex justify-content-end">
+
+
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="SignUp">Kayıt Ol</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="SignIn">Giriş Yap</a>
+        </li>
+    </ul>
+}
+

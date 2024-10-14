@@ -21,7 +21,23 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 */
 builder.Services.AddIdentityWithExt();
 
+//cookie ayarlarý buradan yapýlýr.
+builder.Services.ConfigureApplicationCookie(options =>
+{
+	/*
+	  RememberMe iþaretlenirse bu  60 gün tarayýcýda kayýtlý olur yani SignIn fonksiyonundaki PasswordSignInAsync methodunda
+      3. parametre true gelmelidir. Eðer false geliyorsa oluþan cookie tarayýcý açýk olduðu sürece var olur.
+    */
+	var cookieBuilder = new CookieBuilder();
+    cookieBuilder.Name = "AppCookie";
+    options.LoginPath = new PathString("/home/SignIn");
+    options.Cookie = cookieBuilder;
+    options.ExpireTimeSpan = TimeSpan.FromDays(60);
+    options.SlidingExpiration = true;
 
+}
+
+);
 
 
 var app = builder.Build();
