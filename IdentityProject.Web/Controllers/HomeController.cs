@@ -10,16 +10,18 @@ namespace IdentityProject.Web.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly UserManager<User> _UserManager;
+        private readonly UserManager<User> _UserManager; //Identity ile user ekleme işlemlerini yapan sınıftır
+        private readonly SignInManager<User> _SignInManager; //Identity ile signIn işlemlerini yapmaya yarayan sınıftır.
 
 
-        public HomeController(ILogger<HomeController> logger, UserManager<User> userManager)
-        {
-            _logger = logger;
-            _UserManager = userManager;
-        }
+		public HomeController(ILogger<HomeController> logger, UserManager<User> userManager, SignInManager<User> signInManager)
+		{
+			_logger = logger;
+			_UserManager = userManager;
+			_SignInManager = signInManager;
+		}
 
-        public IActionResult Index()
+		public IActionResult Index()
         {
             return View();
         }
@@ -35,11 +37,46 @@ namespace IdentityProject.Web.Controllers
 
         }
 
+        [HttpPost]
+        /*kullanıcı sadece Giriş yap butonuna basarak giriş sayfasına gelmeyebilir ekstra olarak giriş yapmadan göremeyeceği
+        sayfalar içinde giriş sayfasına yönlendirilmelidir. Bu nedenle ikince parametre olarak returnUrl parametresini verdik */
+        public async Task<IActionResult> SignIn(SignInViewModel signInViewModel, string? returnUrl = null)
+        {
+            returnUrl = returnUrl ?? Url.Action("Index", "Home");
+
+            var user = await _UserManager.FindByEmailAsync(signInViewModel.Email);
+
+            if (user == null)
+            {
+                ModelState.AddModelError(string.Empty, "Email veya şifre yanlış");
+                return View();
+            }
+
+            /*3. parametre true ise kullanıcın bilgilerini cookie'de tutup tutmamaya yarar.RememberMe tiklenirse true döner
+                 Version belirnenen süre boyunca kullanıcı bilgileri tarayıcı kapatılıp açılsa dahi cookie'de tutulur.
+              4. parametre yanlış giriş ile ilgilidir. Eğer kullanıcı çok fazla yanlış giriş yaparsa identity özelliği olarak
+                 kullanıcının giriş belirli bir müddet kilitlenir.
+                 Bu işlem başarılı olursa artık login olunmuş demektir PsswordSignInAsync methodu artık kullanıcının bilgilerine 
+                 bir cookie oluşturur.
+            */
+            var SignInResult =await _SignInManager.PasswordSignInAsync(user, signInViewModel.Password, signInViewModel.RememberMe, false);
+
+            if (SignInResult.Succeeded)
+            {
+                return Redirect(returnUrl);
+            }
+			
+            ModelState.AddModelError(string.Empty, "Email veya şifre yanlış");
+	        return View();
+
+		
+         }
 
         public IActionResult SignUp()
         {
             return View();
         }
+        
 
         [HttpPost]
         public async Task<IActionResult> SignUp(SignUpViewModel signUpViewModel)

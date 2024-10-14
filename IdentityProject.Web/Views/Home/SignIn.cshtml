@@ -7,6 +7,8 @@
 <div class="row">
     <div class="col-md-4 offset-md-4">
 		<h1>Giriş Yap</h1><br />
+
+		<div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
 		<form asp-controller="Home" asp-action="SignIn" method="post">
 			<div class="form-group">
 
@@ -16,7 +18,7 @@
 
 			<div class="form-group">
 				
-				<input class="form-control" asp-for="Password" placeholder="Şifre">
+				<input type="password"class="form-control" asp-for="Password" placeholder="Şifre">
 				<span class="text-danger" asp-validation-for="Password"></span>
 			</div><br />
 			
