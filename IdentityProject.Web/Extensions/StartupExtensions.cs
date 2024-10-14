@@ -21,9 +21,17 @@ namespace IdentityProject.Web.Extensions
                 options.Password.RequireUppercase = false;
                 options.Password.RequireDigit = false;
 
+                //3 kere başarısız giriş yapan kullanıcı 3 dakika kitlenir sisteme giriş yapamaz
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(3);
+                options.Lockout.MaxFailedAccessAttempts = 3;
+
+
             }).AddPasswordValidator<PasswordValidator>().AddUserValidator<UserValidator>()
             .AddErrorDescriber<LocalizationIdentityErrorDescriber>().AddEntityFrameworkStores<AppDbContext>();
             //CustomValidatorden geliyor.
+
+
+
         }
     }
 }

@@ -3,6 +3,7 @@ using IdentityProject.Web.Models.Entities;
 using IdentityProject.Web.Models.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System.Diagnostics;
 
 namespace IdentityProject.Web.Controllers
@@ -55,19 +56,26 @@ namespace IdentityProject.Web.Controllers
             /*3. parametre true ise kullanıcın bilgilerini cookie'de tutup tutmamaya yarar.RememberMe tiklenirse true döner
                  Version belirnenen süre boyunca kullanıcı bilgileri tarayıcı kapatılıp açılsa dahi cookie'de tutulur.
               4. parametre yanlış giriş ile ilgilidir. Eğer kullanıcı çok fazla yanlış giriş yaparsa identity özelliği olarak
-                 kullanıcının giriş belirli bir müddet kilitlenir.
+                 kullanıcının giriş belirli bir müddet kilitlenir.İdentity serviste istenilen ayarlar sağlanabilir.
                  Bu işlem başarılı olursa artık login olunmuş demektir PsswordSignInAsync methodu artık kullanıcının bilgilerine 
                  bir cookie oluşturur.
             */
-            var SignInResult =await _SignInManager.PasswordSignInAsync(user, signInViewModel.Password, signInViewModel.RememberMe, false);
+            var SignInResult =await _SignInManager.PasswordSignInAsync(user, signInViewModel.Password, signInViewModel.RememberMe, true);
 
             if (SignInResult.Succeeded)
             {
                 return Redirect(returnUrl);
             }
-			
-            ModelState.AddModelError(string.Empty, "Email veya şifre yanlış");
-	        return View();
+
+            if (SignInResult.IsLockedOut)
+            {
+                ModelState.AddModelError(string.Empty,  "Sisteme 3 dakika boyunca giriş yapamazsınız" );
+                return View();
+            }
+
+            ModelState.AddModelError(string.Empty, $"Email veya şifre yanlış.Yanlış giriş sayısı : " +
+                $"{await _UserManager.GetAccessFailedCountAsync(user)}");
+	             return View();
 
 		
          }
