@@ -2,6 +2,7 @@
 using IdentityProject.Web.Models;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using IdentityProject.Web.CustomValidations;
+using IdentityProject.Web.Localization;
 
 namespace IdentityProject.Web.Extensions
 {
@@ -20,7 +21,8 @@ namespace IdentityProject.Web.Extensions
                 options.Password.RequireUppercase = false;
                 options.Password.RequireDigit = false;
 
-            }).AddPasswordValidator<PasswordValidator>().AddUserValidator<UserValidator>().AddEntityFrameworkStores<AppDbContext>();
+            }).AddPasswordValidator<PasswordValidator>().AddUserValidator<UserValidator>()
+            .AddErrorDescriber<LocalizationIdentityErrorDescriber>().AddEntityFrameworkStores<AppDbContext>();
             //CustomValidatorden geliyor.
         }
     }

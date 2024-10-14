@@ -31,14 +31,14 @@ namespace IdentityProject.Web.Models.ViewModels
         public string PhoneNumber { get; set; }
 
      
-        [Required(ErrorMessage = "Parola Boş Bırakılamaz.")]
-        [Display(Name = "Parola : ")]
+        [Required(ErrorMessage = "Şifre Boş Bırakılamaz.")]
+        [Display(Name = "Şifre : ")]
         public string Password { get; set; }
 
 
-        [Compare(nameof(Password),ErrorMessage ="Parolalar Eşleşmiyor.")]
-        [Required(ErrorMessage = "Parolayı Yeniden Gir Alanı Boş Bırakılamaz.")]
-        [Display(Name = "Parolayı yeniden giriniz : ")]
+        [Compare(nameof(Password),ErrorMessage ="Şifreler Eşleşmiyor.")]
+        [Required(ErrorMessage = "Şifre Yeniden Gir Alanı Boş Bırakılamaz.")]
+        [Display(Name = "Şifre yeniden giriniz : ")]
         public string PasswordConfirm { get; set; }
     }
 }
