@@ -1,6 +1,8 @@
 using IdentityProject.Web.Extensions;
 using IdentityProject.Web.Models;
 using IdentityProject.Web.Models.Entities;
+using IdentityProject.Web.OptionsModels;
+using IdentityProject.Web.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.CodeAnalysis.Operations;
 using Microsoft.EntityFrameworkCore;
@@ -15,6 +17,8 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("SqlCon"));
 }
 );
+builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
+builder.Services.AddScoped<IEmailService, EmailService>();
 
 /*Ýdentity ile ekleme iþlemi yapýlýrken kullanýlacak rules'lar burada ayarlanabilir.Bir Extention klasörü oluþturup burada 
   static bir class tanýmladýktan sonra  oluþturulan static methoda IServiceCollection türünden bir parametre vererek

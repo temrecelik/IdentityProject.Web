@@ -1,6 +1,7 @@
 ﻿using IdentityProject.Web.Models;
 using IdentityProject.Web.Models.Entities;
 using IdentityProject.Web.Models.ViewModels;
+using IdentityProject.Web.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -15,13 +16,16 @@ namespace IdentityProject.Web.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly UserManager<User> _UserManager; //Identity ile user ekleme işlemlerini yapan sınıftır
         private readonly SignInManager<User> _SignInManager; //Identity ile signIn işlemlerini yapmaya yarayan sınıftır.
+        private readonly IEmailService _EmailService;
 
 
-		public HomeController(ILogger<HomeController> logger, UserManager<User> userManager, SignInManager<User> signInManager)
+
+		public HomeController(ILogger<HomeController> logger, UserManager<User> userManager, SignInManager<User> signInManager, IEmailService emailService)
 		{
 			_logger = logger;
 			_UserManager = userManager;
 			_SignInManager = signInManager;
+			_EmailService = emailService;
 		}
 
 		public IActionResult Index()
@@ -46,6 +50,10 @@ namespace IdentityProject.Web.Controllers
         public async Task<IActionResult> SignIn(SignInViewModel signInViewModel, string? returnUrl = null)
         {
             returnUrl = returnUrl ?? Url.Action("Index", "Home");
+            if(signInViewModel.Password == null || signInViewModel.Email == null)
+            {
+                return View();
+            }
 
             var user = await _UserManager.FindByEmailAsync(signInViewModel.Email);
 
@@ -141,15 +149,23 @@ namespace IdentityProject.Web.Controllers
 
             if (hasUser == null)
             {
-                ModelState.AddModelError(string.Empty, "Bu mail adresine sahip kullanıcı bulunamamıştır.");
+                ModelState.AddModelError(string.Empty, "Bu mail adresine sahip bir kullanıcı bulunamamıştır.");
                 return View();
             }
 
             string passwordResetToken = await _UserManager.GeneratePasswordResetTokenAsync(hasUser);
-            var passwordResetLink = Url.Action("ResetPassword","Home", new {UserId = hasUser.Id ,Token = passwordResetToken});
-            
+            var passwordResetLink = Url.Action("ResetPassword","Home", new {UserId = hasUser.Id ,Token = passwordResetToken}
+            ,HttpContext.Request.Scheme);
 
-           return  View();
+          
+
+            /*bu şekilde ForgetPassword'un httpPost'u yerine HttpGet'ine yönlendirilir. Uygulama bunu başka bir sayfaya 
+             yönlendiğini düşündüğü için viewBag ile alınan mesajlar tutulmaz bu nedenle mesajı TempData ile tutarız.*/
+
+            await _EmailService.SendResetPasswordEmail(passwordResetLink, hasUser.Email);
+
+             TempData["success"]= $"Şifre yenileme bağlantısı {hasUser.Email} mail adresine gönderilmiştir.";
+           return  RedirectToAction(nameof (ForgetPassword));
         }
 
 
