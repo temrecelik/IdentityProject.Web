@@ -1,6 +1,7 @@
 using IdentityProject.Web.Extensions;
 using IdentityProject.Web.Models;
 using IdentityProject.Web.Models.Entities;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.CodeAnalysis.Operations;
 using Microsoft.EntityFrameworkCore;
 
@@ -30,7 +31,18 @@ builder.Services.ConfigureApplicationCookie(options =>
     */
 	var cookieBuilder = new CookieBuilder();
     cookieBuilder.Name = "AppCookie";
+
+    /*
+     Login olmadan girilemeyen sayfalarýn url'ine girmeye çalýþýrsak  bu kod sayesinde identity bizi Belirlediðimiz bu login 
+     sayfasýna atacaktýr.
+     */
     options.LoginPath = new PathString("/home/SignIn");
+
+    /*Cookie'ye çýkýþ yap fonksiyonunu tanýttýðýmýzda html tarafýnda asp-route-returnurl="/Home/Index" gibi  taglar ile çýkýþ yaptýktan
+     sonra hangi sayfaya yönlendiriliceðini belirleyebiliriz. Method içinde rediractionAction kullanmadýðýmýzdan birden fazla 
+     çýkýþ yap butonu kullanýlan bir web sitesinde butonun yerine göre farklý sayfalara yönlendirme yapýlabilir.*/
+    options.LogoutPath = new PathString("/Member/LogOut");
+    
     options.Cookie = cookieBuilder;
     options.ExpireTimeSpan = TimeSpan.FromDays(60);
     options.SlidingExpiration = true;
@@ -55,6 +67,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 

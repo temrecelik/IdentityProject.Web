@@ -3,6 +3,7 @@ using IdentityProject.Web.Models;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using IdentityProject.Web.CustomValidations;
 using IdentityProject.Web.Localization;
+using Microsoft.AspNetCore.Identity;
 
 namespace IdentityProject.Web.Extensions
 {
@@ -11,7 +12,14 @@ namespace IdentityProject.Web.Extensions
         public static void  AddIdentityWithExt(this IServiceCollection services)
 
         {
-            services.AddIdentity<User, Role>(options =>
+            /*Parola yenile bağlantısındaki tokenin ömrünü bu şekilde ayarlarız 1 saat sonra link geçersiz olur.*/
+			services.Configure<DataProtectionTokenProviderOptions>(options =>
+			{
+				options.TokenLifespan = TimeSpan.FromSeconds(1);
+			});
+
+
+			services.AddIdentity<User, Role>(options =>
             {
                 options.User.RequireUniqueEmail = true;
                 options.User.AllowedUserNameCharacters = "abcdefghijklmnoprstuvwcxyz0123456789_.";
@@ -26,12 +34,18 @@ namespace IdentityProject.Web.Extensions
                 options.Lockout.MaxFailedAccessAttempts = 3;
 
 
-            }).AddPasswordValidator<PasswordValidator>().AddUserValidator<UserValidator>()
-            .AddErrorDescriber<LocalizationIdentityErrorDescriber>().AddEntityFrameworkStores<AppDbContext>();
-            //CustomValidatorden geliyor.
+            })  .AddPasswordValidator<PasswordValidator>()
+                .AddUserValidator<UserValidator>()
+                .AddErrorDescriber<LocalizationIdentityErrorDescriber>()
+                .AddEntityFrameworkStores<AppDbContext>()
+                .AddDefaultTokenProviders();
+			//CustomValidatorden geliyor.
 
+			/*
+              AddDefaultTokenProviders():Şifremi unuttum kısmında şifre sıfırlama işleminde token kullanmaya yarar mail adresine
+              gönderilen şifre sıfırlama sayfasının ömrünü belirlemeye yarar.
+             */
 
-
-        }
-    }
+		}
+	}
 }

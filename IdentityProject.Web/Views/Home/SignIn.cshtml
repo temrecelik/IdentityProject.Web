@@ -6,10 +6,16 @@
 @model SignInViewModel
 <div class="row">
     <div class="col-md-4 offset-md-4">
-		<h1>Giriş Yap</h1><br />
+		<h1 >Giriş Yap</h1><br />
 
 		<div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
-		<form asp-controller="Home" asp-action="SignIn" method="post">
+		
+		<!-- eğer Authorize olmuş bir sayfaya gidilmek istendiyse asp-route-returnUrl kodu ile bu sayfaya yönlenilir yani
+			url null değilse bu sayfaya gider eğer null ise controllerda belirnenen sayfaya gider çünkü orada bunun olmasını 
+			sağlayan kodu yazdık
+
+		-->		
+		<form asp-controller="Home" asp-action="SignIn" asp-route-returnUrl="@Context.Request.Query["returnUrl"]" method="post">
 			<div class="form-group">
 
 				<input  class="form-control" asp-for="Email" placeholder="Mail Adresi" >
@@ -22,12 +28,24 @@
 				<span class="text-danger" asp-validation-for="Password"></span>
 			</div><br />
 			
+			<div class="row">
+
+				<div class="col-md-6">
+		
 			<div class="form-group form-check">
 				<input  class="form-check-input" asp-for="RememberMe">
 				<label class="form-check-label" for="exampleCheck1">Beni Hatırla</label>
-			</div><br />
+					</div><br />
+				</div>
+
+				<div class="col-md-6">
+					<a class="float-end btn-link" asp-controller="Home" asp-action="ForgetPassword">Şifremi Unuttum</a>
+				</div>
+
+			</div>
 		
 			<button type="submit" class="btn btn-primary">Giriş Yap</button>
+			
 		</form>
     </div>
 </div>

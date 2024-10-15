@@ -15,7 +15,7 @@
                 @User.Identity.Name
             </a>
             <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                <li><a class="dropdown-item" asp-controller="Member" asp-action="LogOut">Çıkış Yap</a></li>
+                <li><a class="dropdown-item" asp-route-returnurl="/Home/SignIn" asp-controller="Member" asp-action="LogOut">Çıkış Yap</a></li>
 
             </ul>
         </li>

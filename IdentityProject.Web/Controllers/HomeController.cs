@@ -1,9 +1,11 @@
 ﻿using IdentityProject.Web.Models;
 using IdentityProject.Web.Models.Entities;
 using IdentityProject.Web.Models.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.CodeAnalysis.CSharp;
 using System.Diagnostics;
 
 namespace IdentityProject.Web.Controllers
@@ -31,13 +33,13 @@ namespace IdentityProject.Web.Controllers
         {
             return View();
         }
-
-        public IActionResult SignIn()
+	
+		public IActionResult SignIn()
         {
             return View();
 
         }
-
+        
         [HttpPost]
         /*kullanıcı sadece Giriş yap butonuna basarak giriş sayfasına gelmeyebilir ekstra olarak giriş yapmadan göremeyeceği
         sayfalar içinde giriş sayfasına yönlendirilmelidir. Bu nedenle ikince parametre olarak returnUrl parametresini verdik */
@@ -127,7 +129,30 @@ namespace IdentityProject.Web.Controllers
         }
 
          
-        
+        public IActionResult ForgetPassword()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ForgetPassword(ForgetPasswordViewModel forgetPasswordViewModel)
+        {
+            var hasUser = await _UserManager.FindByEmailAsync(forgetPasswordViewModel.Email);   
+
+            if (hasUser == null)
+            {
+                ModelState.AddModelError(string.Empty, "Bu mail adresine sahip kullanıcı bulunamamıştır.");
+                return View();
+            }
+
+            string passwordResetToken = await _UserManager.GeneratePasswordResetTokenAsync(hasUser);
+            var passwordResetLink = Url.Action("ResetPassword","Home", new {UserId = hasUser.Id ,Token = passwordResetToken});
+            
+
+           return  View();
+        }
+
+
         
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

@@ -1,9 +1,11 @@
 ﻿using IdentityProject.Web.Models.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace IdentityProject.Web.Controllers
 {
+	[Authorize]
 	public class MemberController : Controller
 	{
 		private readonly SignInManager<User> _signInManager;
@@ -13,10 +15,17 @@ namespace IdentityProject.Web.Controllers
 			_signInManager = signInManager;
 		}
 
-		public async Task<IActionResult> LogOut()
+		/*Çıkış yapma işlemi Authorize olmalıdır çünkü giriş yapmadan çıkış yapılmaz*/
+
+		public async Task /*<IActionResult>*/ LogOut()
 		{
 			await _signInManager.SignOutAsync();
-			return RedirectToAction("Index","Home");
+			//return RedirectToAction("Index","Home");
+		}
+
+		public IActionResult Index()
+		{
+			return View();
 		}
 	}
 }
