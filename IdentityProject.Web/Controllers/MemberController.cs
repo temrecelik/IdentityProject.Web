@@ -18,7 +18,10 @@ namespace IdentityProject.Web.Controllers
             _userManager = userManager;
         }
 
-        /*Çıkış yapma işlemi Authorize olmalıdır çünkü giriş yapmadan çıkış yapılmaz Identity'den gelen özellik*/
+        /*Çıkış yapma işlemi Authorize olmalıdır çünkü giriş yapmadan çıkış yapılmaz Identity'den gelen özelliktir.LogOut fonksiyonunda
+          görüldüğü gibi bir yönlendirme yazmadık yani bu fonksiyonun view sadece çalışır çıkış yapar ama çıkış yaptıktan sonra
+		  hangi sayfaya yönlenmesi gerektiğini asp-route-returnUrl tagı ile belirtmemiz gereklidir.*/
+		
 
         public async Task /*<IActionResult>*/ LogOut()
 		{
@@ -26,6 +29,7 @@ namespace IdentityProject.Web.Controllers
 			//return RedirectToAction("Index","Home");
 		}
 
+		
 		public  async Task<IActionResult> Index()
 		{
 

@@ -10,7 +10,7 @@ namespace IdentityProject.Web.CustomValidations
             //Kullanıcı adı sayı ile başlayamaz 
 
             var errors = new List<IdentityError>();
-            var isNumaric = int.TryParse(user!.UserName[0].ToString() , out _);
+            var isNumaric = int.TryParse(user.UserName![0].ToString() , out _);
 
             if (isNumaric)
             {

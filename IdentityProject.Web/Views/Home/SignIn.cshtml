@@ -18,13 +18,13 @@
 		<form asp-controller="Home" asp-action="SignIn" asp-route-returnUrl="@Context.Request.Query["returnUrl"]" method="post">
 			<div class="form-group">
 
-				<input  class="form-control" asp-for="Email" placeholder="Mail Adresi" >
+				<input value="emrecelik@gmail.com" class="form-control" asp-for="Email" placeholder="Mail Adresi">
 				<span class="text-danger" asp-validation-for="Email"></span>
 			</div><br />
 
 			<div class="form-group">
 				
-				<input type="password"class="form-control" asp-for="Password" placeholder="Şifre">
+				<input value="identity123" class="form-control" asp-for="Password" placeholder="Şifre">
 				<span class="text-danger" asp-validation-for="Password"></span>
 			</div><br />
 			
