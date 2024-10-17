@@ -48,5 +48,11 @@ namespace IdentityProject.Web.Controllers
 				ModelState.AddModelError(string.Empty, "Kullanıcı bilgileri bulunamadı.");
 			return View();
 		}
+
+		public async Task<IActionResult> PasswordChange()
+		{
+			return View();
+		}
+
 	}
 }
