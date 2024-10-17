@@ -49,7 +49,8 @@ namespace IdentityProject.Web.Controllers
         sayfalar içinde giriş sayfasına yönlendirilmelidir. Bu nedenle ikince parametre olarak returnUrl parametresini verdik */
         public async Task<IActionResult> SignIn(SignInViewModel signInViewModel, string? returnUrl = null)
         {
-            returnUrl = returnUrl ?? Url.Action("Index", "Home");
+            //returnUrl null ise Home/Index sayfasının linkini alır.
+            returnUrl ??= Url.Action("Index", "Home");
             if(signInViewModel.Password == null || signInViewModel.Email == null)
             {
                 return View();
@@ -74,7 +75,7 @@ namespace IdentityProject.Web.Controllers
 
             if (SignInResult.Succeeded)
             {
-                return Redirect(returnUrl);
+                return Redirect(returnUrl!);
             }
 
             if (SignInResult.IsLockedOut)
@@ -136,6 +137,9 @@ namespace IdentityProject.Web.Controllers
             return View();
         }
 
+
+
+
          
         public IActionResult ForgetPassword()
         {
@@ -162,16 +166,74 @@ namespace IdentityProject.Web.Controllers
             /*bu şekilde ForgetPassword'un httpPost'u yerine HttpGet'ine yönlendirilir. Uygulama bunu başka bir sayfaya 
              yönlendiğini düşündüğü için viewBag ile alınan mesajlar tutulmaz bu nedenle mesajı TempData ile tutarız.*/
 
-            await _EmailService.SendResetPasswordEmail(passwordResetLink, hasUser.Email);
+            await _EmailService.SendResetPasswordEmail(passwordResetLink!, hasUser.Email!);
 
              TempData["success"]= $"Şifre yenileme bağlantısı {hasUser.Email} mail adresine gönderilmiştir.";
            return  RedirectToAction(nameof (ForgetPassword));
         }
 
 
-        public IActionResult ResetPassword()
+
+
+
+        //ResetPassword sayfaında direkt olarak bu parametreler ille token ve userId'ye erişilir yani otomatik mapleme yapılır.
+        public IActionResult ResetPassword(string userId ,string token)
         {
+            //ResetPassword fonksiyonu için userID ve token'ı ResetPassword HttpPost'a taşımak içine TempData kullandık
+            TempData["UserId"] = userId;
+            TempData["token"] = token;  
+            
+           
+
             return View();
+
+            
+
+        }
+
+        [HttpPost]
+        public async Task <IActionResult> ResetPassword(ResetPasswordViewModel resetPasswordViewModel)
+        {
+            var userId = TempData["UserId"];
+            var token = TempData["token"];
+
+         
+
+            if (userId == null || token == null) {
+                //ModelState.AddModelError(string.Empty, "Bir şeyler ters gitti. Şifre sıfırlamak için tekrar deneyiniz.");
+                //return View();
+                throw new Exception("Bir şeyler ters gitti. Şifre sıfırlamak için tekrar deneyiniz.");
+              
+            }
+
+            var hasUser = await _UserManager.FindByIdAsync(userId.ToString()!);
+
+            if (hasUser == null) {
+                ModelState.AddModelError(string.Empty, "Bir şeyler ters gitti. Şifre sıfırlamak için tekrar deneyiniz");
+                return View();
+            }
+
+            //burada identity ile password resetlenebiliyor
+            IdentityResult result =await _UserManager.ResetPasswordAsync(hasUser, token!.ToString()!, resetPasswordViewModel.Password);
+
+            if (result.Succeeded)
+            {
+                TempData["SuccessMessage"] = "Şifre yenileme işlemi başarılı";
+                return RedirectToAction("SignIn", "Home");
+            }
+            else
+            {
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, error.Description);
+                }
+
+                return View();  
+            }
+
+             
+
+            
         }
 
 

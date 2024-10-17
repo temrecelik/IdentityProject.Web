@@ -58,7 +58,11 @@ builder.Services.ConfigureApplicationCookie(options =>
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+
+/*
+Eðer proje development ortamýnda deðilse fýrlatýlan hatalar error sayfasýna yönlendirilir.Development modunda ise frameworkün 
+vereceði hata sayfasýna gönderilir
+*/
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");

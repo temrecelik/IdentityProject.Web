@@ -20,6 +20,7 @@ namespace IdentityProject.Web.Models.ViewModels
         [Display(Name = "Mail Adresi : ")]
         public string Email { get; set; }
 
+        [DataType(DataType.Password)]
         [Required(ErrorMessage = "Şifre Boş Bırakılamaz.")]
         [Display(Name = "Şifre : ")]
         public string Password { get; set; }

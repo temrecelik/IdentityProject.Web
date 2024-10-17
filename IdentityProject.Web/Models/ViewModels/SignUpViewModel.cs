@@ -30,12 +30,12 @@ namespace IdentityProject.Web.Models.ViewModels
         [Display(Name = "Telefon Numarası: ")]
         public string PhoneNumber { get; set; }
 
-     
+        [DataType(DataType.Password)]
         [Required(ErrorMessage = "Şifre Boş Bırakılamaz.")]
         [Display(Name = "Şifre : ")]
         public string Password { get; set; }
 
-
+        [DataType(DataType.Password)]
         [Compare(nameof(Password),ErrorMessage ="Şifreler Eşleşmiyor.")]
         [Required(ErrorMessage = "Şifre Yeniden Gir Alanı Boş Bırakılamaz.")]
         [Display(Name = "Şifre yeniden giriniz : ")]
