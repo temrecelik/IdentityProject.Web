@@ -49,10 +49,56 @@ namespace IdentityProject.Web.Controllers
 			return View();
 		}
 
-		public async Task<IActionResult> PasswordChange()
+		public IActionResult PasswordChange() {  return View(); }	
+
+
+		[HttpPost]
+		public async Task<IActionResult> PasswordChange(PasswordChangeViewModel passwordChangeViewModel)
 		{
-			return View();
+			if (!ModelState.IsValid) {
+				return View();
+			}
+
+			var currentUser =await _userManager.FindByNameAsync(User.Identity!.Name!);
+
+			var checkoldPassword =await _userManager.CheckPasswordAsync(currentUser!, passwordChangeViewModel.PasswordOld);
+
+			if(!checkoldPassword)
+			{
+				ModelState.AddModelError(string.Empty, "Mevcut Şifre yanlış");
+				return View();
+			}
+
+			var result = await _userManager.ChangePasswordAsync(currentUser!,passwordChangeViewModel.PasswordOld ,passwordChangeViewModel.PasswordNew);
+
+
+			if (!result.Succeeded)
+			{
+
+				foreach (var error in result.Errors)
+				{
+
+					ModelState.AddModelError(string.Empty, error.Description);
+					return View();
+				}
+
+			}
+				/*Şifre değiştiği için cookie'nin yenilenmesi gerekli bu nedenle bu iki kodla oturum kapatım yeni şifreyle 
+				 tekrar açtık yani cookie yenilenenerek yeni şifreyi aldı.SecurityStamp Değerinide değiştirdikki diğer uygulamardan
+				 oturum sonlandırsın*/
+				await _userManager.UpdateSecurityStampAsync(currentUser!);
+				await _signInManager.SignOutAsync();
+				await _signInManager.PasswordSignInAsync(currentUser!,passwordChangeViewModel.PasswordNew , true,false);
+
+				TempData["SuccessMessage"] = "Şifreniz başarılı bir şekilde değiştirilmiştir.";
+
+				return View();
+
+
+
+
+			}
 		}
 
 	}
-}
+
