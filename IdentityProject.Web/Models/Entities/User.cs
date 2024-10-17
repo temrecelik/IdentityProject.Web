@@ -31,6 +31,9 @@ namespace IdentityProject.Web.Models.Entities
 {
     public class User : IdentityUser
     {
-      
+        public string? City { get; set; } //? koymak nullable olabilir demektir.
+        public string? Picture { get; set; }
+        public DateTime? BirthDay { get; set; }
+        public byte? Gender { get; set; }
     }
 }

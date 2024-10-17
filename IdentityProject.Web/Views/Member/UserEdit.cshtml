@@ -1,0 +1,108 @@
+﻿
+@{
+    ViewData["Title"] = "UserEdit";
+}
+
+
+
+@model UserEditViewModel
+
+<!--
+    Bu işlem ile view modeldaki validationlar buton clicklenmeden yani backend gitmeden client taraflı  çalışır!
+    Burada _ValidationScriptsPartia partial viewi ekrana yükleniyor bundanda temel validation işlemlerinin tutulduğu
+    scriptlar var.
+
+-->
+@section Scripts
+{
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}
+
+
+<div class="row">
+
+
+    <div class="col-md-6 offset-md-3">
+        @* Ekran 12'ye bölünür 6 lık kısım kullanılır sağdan ve soldan 3 birim boşluk bırakır *@
+        <h2 class="col-md-4 offset-md-4">Profili Düzenle</h2> <br />
+
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success" role="alert">
+                @TempData["SuccessMessage"]
+
+            </div>
+        }
+        <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert">
+        </div>
+
+
+        <!--Eğer form bir file alıyorsa enctype="multipart/form-data" şeklinde belirtilmelidir.-->
+        <form asp-controller="Member" asp-action="UserEdit" method="post" enctype="multipart/form-data">
+
+
+
+
+            <div class="row mb-3">
+                <label  class="col-md-4 col-form-label" asp-for="UserName"></label>
+                <div class="col-md-8">
+                    <input asp-for="UserName" class="form-control">
+                    <span asp-validation-for="UserName" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <label  class="col-md-4 col-form-label" asp-for="Email"></label>
+                <div class="col-md-8">
+                    <input asp-for="Email" class="form-control">
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <label  class="col-md-4 col-form-label" asp-for="PhoneNumber"></label>
+                <div class="col-md-8">
+                    <input asp-for="PhoneNumber" class="form-control">
+                    <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <label  class="col-md-4 col-form-label" asp-for="BirthDate"></label>
+                <div class="col-md-8">
+                    <input asp-for="BirthDate" class="form-control">
+                    <span asp-validation-for="BirthDate" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <label for="Password" class="col-md-4 col-form-label" asp-for="city"></label>
+                <div class="col-md-8">
+                    <input asp-for="city" class="form-control">
+                    <span asp-validation-for="city" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <label  class="col-md-4 col-form-label" asp-for="gender"></label>
+                <div class="col-md-8">
+					<select class ="form-control" asp-for="gender" asp-items="ViewBag.gender">  "</select>
+
+                    <span asp-validation-for="gender" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <label for="Password" class="col-md-4 col-form-label" asp-for="city"></label>
+                <div class="col-md-8">
+                    <input type="file"  asp-for="city" class="form-control">
+                    <span asp-validation-for="city" class="text-danger"></span>
+                </div>
+            </div>
+
+
+
+            <button type="submit" class="btn btn-primary">Kaydet</button>
+        </form>
+    </div>
+</div>

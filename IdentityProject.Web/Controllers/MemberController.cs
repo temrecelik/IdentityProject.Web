@@ -1,8 +1,10 @@
 ﻿using IdentityProject.Web.Models.Entities;
+using IdentityProject.Web.Models.Enums;
 using IdentityProject.Web.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace IdentityProject.Web.Controllers
 {
@@ -98,7 +100,20 @@ namespace IdentityProject.Web.Controllers
 
 
 			}
+
+
+		public IActionResult UserEdit()
+		{
+			ViewBag.gender = new SelectList(Enum.GetNames(typeof(Gender)));
+			
+
+			
+			return View(); 
 		}
+		}
+
+		
+
 
 	}
 
