@@ -46,7 +46,7 @@
             <div class="row mb-3">
                 <label  class="col-md-4 col-form-label" asp-for="UserName"></label>
                 <div class="col-md-8">
-                    <input asp-for="UserName" class="form-control">
+                    <input asp-for="UserName" class="form-control" >
                     <span asp-validation-for="UserName" class="text-danger"></span>
                 </div>
             </div>
@@ -54,7 +54,7 @@
             <div class="row mb-3">
                 <label  class="col-md-4 col-form-label" asp-for="Email"></label>
                 <div class="col-md-8">
-                    <input asp-for="Email" class="form-control">
+                    <input asp-for="Email" class="form-control" >
                     <span asp-validation-for="Email" class="text-danger"></span>
                 </div>
             </div>
@@ -62,7 +62,7 @@
             <div class="row mb-3">
                 <label  class="col-md-4 col-form-label" asp-for="PhoneNumber"></label>
                 <div class="col-md-8">
-                    <input asp-for="PhoneNumber" class="form-control">
+                    <input asp-for="PhoneNumber" class="form-control" >
                     <span asp-validation-for="PhoneNumber" class="text-danger"></span>
                 </div>
             </div>
@@ -70,7 +70,7 @@
             <div class="row mb-3">
                 <label  class="col-md-4 col-form-label" asp-for="BirthDate"></label>
                 <div class="col-md-8">
-                    <input asp-for="BirthDate" class="form-control">
+                    <input asp-for="BirthDate" class="form-control" >
                     <span asp-validation-for="BirthDate" class="text-danger"></span>
                 </div>
             </div>
@@ -78,7 +78,7 @@
             <div class="row mb-3">
                 <label for="Password" class="col-md-4 col-form-label" asp-for="city"></label>
                 <div class="col-md-8">
-                    <input asp-for="city" class="form-control">
+                    <input asp-for="city" class="form-control" >
                     <span asp-validation-for="city" class="text-danger"></span>
                 </div>
             </div>
@@ -86,17 +86,19 @@
             <div class="row mb-3">
                 <label  class="col-md-4 col-form-label" asp-for="gender"></label>
                 <div class="col-md-8">
-					<select class ="form-control" asp-for="gender" asp-items="ViewBag.gender">  "</select>
+					<select   class ="form-control" asp-for="gender" asp-items="@ViewBag.genderlist">@TempData["gender"]</select>
+                    <option value="@Model.gender"></option>
 
                     <span asp-validation-for="gender" class="text-danger"></span>
                 </div>
             </div>
 
+
             <div class="row mb-3">
-                <label for="Password" class="col-md-4 col-form-label" asp-for="city"></label>
+                <label for="Password" class="col-md-4 col-form-label" asp-for="Picture"></label>
                 <div class="col-md-8">
-                    <input type="file"  asp-for="city" class="form-control">
-                    <span asp-validation-for="city" class="text-danger"></span>
+                    <input type="file"  asp-for="Picture" class="form-control">
+                    <span asp-validation-for="Picture" class="text-danger"></span>
                 </div>
             </div>
 

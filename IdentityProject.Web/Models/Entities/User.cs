@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using IdentityProject.Web.Models.Enums;
+using Microsoft.AspNetCore.Identity;
 
 
 /*
@@ -34,6 +35,6 @@ namespace IdentityProject.Web.Models.Entities
         public string? City { get; set; } //? koymak nullable olabilir demektir.
         public string? Picture { get; set; }
         public DateTime? BirthDay { get; set; }
-        public byte? Gender { get; set; }
+        public Gender? Gender { get; set; }
     }
 }

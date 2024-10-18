@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using IdentityProject.Web.Models.Enums;
+using System.ComponentModel.DataAnnotations;
 
 namespace IdentityProject.Web.Models.ViewModels
 {
@@ -10,7 +11,7 @@ namespace IdentityProject.Web.Models.ViewModels
 
         [EmailAddress(ErrorMessage = "Mail formatı email@example.com formatında olmalıdır.")]
         [Required(ErrorMessage = "Mail Alanı Boş Bırakılamaz.")]
-        [Display(Name = "Mail Adresi : ")]
+        [Display(Name = "Mail Adresi: ")]
         public string Email { get; set; } =null!;
 
         [Required(ErrorMessage = "Telefon Numarası Boş Bırakılamaz.")]
@@ -23,13 +24,13 @@ namespace IdentityProject.Web.Models.ViewModels
         [DataType(DataType.Date)]
         public  DateTime? BirthDate { get; set; }
 
-        [Display(Name = "Şehir : ")]
+        [Display(Name = "Şehir: ")]
         public string? city { get; set; }
 
-        [Display(Name = "Cinsiyet")]
-        public byte? gender { get; set; }
+        [Display(Name = "Cinsiyet: ")]
+        public Gender? gender { get; set; }
 
-        [Display(Name = "Profil Fotoğrafı")]
+        [Display(Name = "Profil Fotoğrafı: ")]
         public IFormFile? Picture { get; set; }
 
 

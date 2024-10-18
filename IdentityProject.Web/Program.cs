@@ -6,6 +6,7 @@ using IdentityProject.Web.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.CodeAnalysis.Operations;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,6 +26,14 @@ builder.Services.AddScoped<IEmailService, EmailService>();
   bu methoda servis ekleyebiliriz.
 */
 builder.Services.AddIdentityWithExt();
+
+/*
+Uygulamanýn herhangi bir yerindeki klasördeki class'lar IFileProvider interfacesini injecte edersek uygulamadaki
+herhangi bir klasöre eriþilebilir.Bu kod ile referans olarak IdenityProject.Web klasörü belirlendi. Artýk bu referans
+üzerinden alt klasörlere eriþip istenilen kayýt yapýlabilir. Resim gibi dosya içeren inputlar için bu yöntem
+belirlenmelidir.
+    */
+ builder.Services.AddSingleton<IFileProvider>(new PhysicalFileProvider(Directory.GetCurrentDirectory()));
 
 //cookie ayarlarý buradan yapýlýr.
 builder.Services.ConfigureApplicationCookie(options =>
