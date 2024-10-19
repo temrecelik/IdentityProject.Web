@@ -4,11 +4,45 @@
 }
 @model UserInformationViewModel
 
-<h4>Kullanıcı Profili</h4>
 
-<p> <strong class="text-success"  >Kullanıcı Adı:</strong> @Model.UserName</p>
-<p> <strong class="text-success">Email:</strong> @Model.Email</p>
-<p> <strong class="text-success">Telefon Numarası: </strong>@Model.phoneNumber</p>
+
+<div class="d-flex justify-content-center align-items-center" style="height: 50vh;">
+    <div class="col-md-4 mb-3">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex flex-column align-items-center text-center">
+
+@*                     @if(String.IsNullOrEmpty(Model.PictureUrl))
+                     {
+                        <img src="/userpictures/default_userpicture.png" alt="Admin" class="rounded-circle" width="150">
+                    }
+                    else
+                    {
+                        <img src="/userpictures/@(Model.PictureUrl)" alt="Admin" class="rounded-circle" width="150">
+                    }
+                    Viewda iş kodu yazmak yerine bunu tag helpers ile yazdık 
+ *@                  
+
+      <user-picture-thumb-nail class="rounded-circle" width="150" picture-url="@Model.PictureUrl"></user-picture-thumb-nail>
+
+
+
+
+
+                    <div class="mt-3">
+                        <h4>@Model.UserName</h4>
+                        <p class="text-secondary mb-1"><strong>Mail: </strong>@Model.Email</p>
+                        <p class="text-muted font-size-sm"><strong>Telefon: </strong>@Model.phoneNumber</p>
+                      
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+      
+
+
 
  
             

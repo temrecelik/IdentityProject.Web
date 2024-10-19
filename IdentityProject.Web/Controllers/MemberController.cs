@@ -47,6 +47,7 @@ namespace IdentityProject.Web.Controllers
 					UserName = currentUser.UserName!,
 					Email = currentUser.Email!,
 					phoneNumber = currentUser.PhoneNumber,
+					PictureUrl = currentUser.Picture,
 				};
 				return View(userInformationViewModel);
 			}
