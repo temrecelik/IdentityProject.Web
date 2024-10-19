@@ -1,0 +1,45 @@
+﻿@model RoleCreateViewModel
+
+@{
+    ViewData["Title"] = "RoleCreate";
+}
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+
+
+
+<div class="row">
+    <div class="col-md-6 offset-md-3">
+        <h4 class="text-center">Rol Ekle</h4>
+
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success" role="alert">
+                @TempData["SuccessMessage"]
+
+            </div>
+        }
+
+        <form asp-action="RoleCreate">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+               
+                <input asp-for="Name" placeholder="Rol Adı" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+        
+            <div class="form-group mt-3">
+
+                <input type="submit" value="Rol Ekle" class="btn btn-success" />
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+
