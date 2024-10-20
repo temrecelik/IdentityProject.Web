@@ -73,6 +73,7 @@ namespace IdentityProject.Web.Areas.Admin.Controllers
 
             roleToUpdate!.Name = roleUpdateViewModel.Name;
 
+            
             await _roleManager.UpdateAsync(roleToUpdate);
 
             TempData["SuccessMessage"] = "Rol güncelleme işlemi başarılı.";
