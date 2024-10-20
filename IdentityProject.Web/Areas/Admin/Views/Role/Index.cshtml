@@ -3,6 +3,45 @@
     ViewData["Title"] = "Index";
 }
 
-<a class="btn btn-outline-primary" asp-area="admin" asp-controller="Role" asp-action="RoleCreate">Rol Ekle</a>
-<h1>Index</h1>
+@model List<RoleViewModel>
+<h1>Rol Listesi</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+
+            <th scope="col">ID</th>
+            <th scope="col">Rol Adı</th>
+			<th scope ="col">Güncelle</th>
+         
+        </tr>
+    </thead>
+
+
+    @foreach (var item in Model)
+    {
+        <tbody>
+            <tr>
+                <td>@item.Id</td>
+                <td>@item.Name</td>
+
+                <td>
+                     <a
+                        class=" btn btn-outline-success" asp-area="admin" asp-controller="role" asp-action="RoleUpdate"
+                 asp-route-id="@item.Id" 
+                        > Güncelle
+                    </a>
+                     
+                </td>   
+                
+            </tr>
+        </tbody>
+
+    }
+</table>
+
+
+
+<a class="btn btn-success mt-3" asp-area="admin" asp-controller="Role" asp-action="RoleCreate">Rol Ekle</a>
+
 

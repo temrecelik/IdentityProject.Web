@@ -1,20 +1,12 @@
-﻿@model RoleCreateViewModel
-
+﻿
 @{
-    ViewData["Title"] = "RoleCreate";
+    ViewData["Title"] = "RoleUpdate";
 }
-
-@section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
-}
-
-
+@model RoleUpdateViewModel
 
 <div class="row">
     <div class="col-md-6 offset-md-3">
-        <h4 class="text-center">Rol Ekle</h4>
+        <h4 class="text-center">Rol Güncelle</h4>
 
         @if (TempData["SuccessMessage"] != null)
         {
@@ -24,23 +16,21 @@
             </div>
         }
 
-        <form asp-action="RoleCreate" method="post">
+        <form asp-action="RoleUpdate" method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <input  type="hidden" asp-for="Id"/>
             <div class="form-group">
-               
+
                 <input asp-for="Name" placeholder="Rol Adı" class="form-control" />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
-        
-            <div class="form-group mt-3">
 
-                <input type="submit" value="Rol Ekle" class="btn btn-success" />
+            <div class="form-group mt-3">
+                <input type="submit" value="Güncelle" class="btn btn-success" />
             </div>
+
         </form>
     </div>
-    </div>
-
-
-
-
+</div>
 

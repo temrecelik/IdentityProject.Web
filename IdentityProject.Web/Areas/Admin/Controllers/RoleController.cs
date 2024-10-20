@@ -2,6 +2,8 @@
 using IdentityProject.Web.Models.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.EntityFrameworkCore;
 
 namespace IdentityProject.Web.Areas.Admin.Controllers
 {
@@ -17,9 +19,16 @@ namespace IdentityProject.Web.Areas.Admin.Controllers
             _roleManager = roleManager;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var Allroles = await _roleManager.Roles.Select(x => new RoleViewModel()
+            {
+
+                Id = x.Id,
+                Name = x.Name!
+            }).ToListAsync();
+
+            return View(Allroles);
         }
 
         public IActionResult RoleCreate()
@@ -43,6 +52,32 @@ namespace IdentityProject.Web.Areas.Admin.Controllers
             TempData["SuccessMessage"] = "Rol Ekleme işlemi başarılı";
             return View();
 
+        }
+
+        public async Task< IActionResult> RoleUpdate(string id)
+        {
+            var roleToUpdate = await _roleManager.FindByIdAsync(id);
+            if(roleToUpdate == null)
+            {
+                throw new Exception("Güncellenecek rol bulunamamıştır");
+            }
+
+            return View(new RoleUpdateViewModel() { Id = roleToUpdate.Id , Name=roleToUpdate.Name!});
+
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> RoleUpdate(RoleUpdateViewModel roleUpdateViewModel) { 
+            
+            var roleToUpdate = await _roleManager.FindByIdAsync(roleUpdateViewModel.Id);
+
+            roleToUpdate!.Name = roleUpdateViewModel.Name;
+
+            await _roleManager.UpdateAsync(roleToUpdate);
+
+            TempData["SuccessMessage"] = "Rol güncelleme işlemi başarılı.";
+
+            return View(roleUpdateViewModel);
         }
     }
 }
