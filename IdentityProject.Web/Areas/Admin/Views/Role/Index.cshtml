@@ -6,6 +6,16 @@
 @model List<RoleViewModel>
 <h1>Rol Listesi</h1>
 
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success" role="alert">
+        @TempData["SuccessMessage"]
+
+    </div>
+}
+
+
 <table class="table">
     <thead>
         <tr>
@@ -13,7 +23,7 @@
             <th scope="col">ID</th>
             <th scope="col">Rol Adı</th>
 			<th scope ="col">Güncelle</th>
-         
+            <th scope="col">Rolü sil</th>
         </tr>
     </thead>
 
@@ -27,13 +37,21 @@
 
                 <td>
                      <a
-                        class=" btn btn-outline-success" asp-area="admin" asp-controller="role" asp-action="RoleUpdate"
+                        class=" btn btn-outline-success" asp-area="admin" asp-controller="Role" asp-action="RoleUpdate"
                  asp-route-id="@item.Id" 
                         > Güncelle
                     </a>
                      
-                </td>   
-                
+                </td>
+
+                <td>
+                    <a class="btn btn-outline-danger" asp-area="admin" asp-controller="Role" asp-action="RoleDelete"
+                       asp-route-id="@item.Id">
+                      Rolü Sil
+                    </a>
+
+                </td>
+
             </tr>
         </tbody>
 

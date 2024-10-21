@@ -2,6 +2,7 @@
 using IdentityProject.Web.Models.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
 
@@ -80,5 +81,36 @@ namespace IdentityProject.Web.Areas.Admin.Controllers
 
             return View(roleUpdateViewModel);
         }
+
+
+     /*
+      rol silmede sıkıntı var rol silinmiyor.
+      */
+
+        public async Task<IActionResult> RoleDelete(string roleId)
+        {
+            var roleToDelete = await _roleManager.FindByIdAsync(roleId);
+
+            if (roleToDelete == null) {
+                throw new Exception("Bir hata oluştu");
+               
+            }
+
+            var result =await _roleManager.DeleteAsync(roleToDelete);
+
+            if(!result.Succeeded)
+            {
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, error.Description);
+                }
+                return RedirectToAction(nameof(RoleController.Index));
+            }
+
+
+            TempData["SuccessMessage"] = "Rol silme işlemi başarılı.";
+
+            return RedirectToAction(nameof(RoleController.Index));
+        } 
     }
 }
