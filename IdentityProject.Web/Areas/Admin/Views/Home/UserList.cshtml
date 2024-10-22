@@ -12,7 +12,8 @@
 			<th scope="col">ID</th>
 			<th scope="col">USER NAME</th>
 			<th scope="col">EMAİL</th>
-		</tr>
+            <th scope="col">Rol İşlemleri</th>
+        </tr>
 	</thead>
 
 
@@ -23,6 +24,9 @@
                 <td>@item.UserId</td>
                 <td>@item.UserName</td>
                 <td>@item.Email</td>
+                <td><a class="btn btn-outline-info" asp-area="admin" asp-controller="Role" asp-action="AssignRoleToUser"
+                       asp-route-Id="@item.UserId">Rol Ata</a>
+                </td>
             </tr>            
         </tbody>
 

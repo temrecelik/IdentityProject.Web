@@ -32,6 +32,7 @@ namespace IdentityProject.Web.Areas.Admin.Controllers
             return View(Allroles);
         }
 
+
         public IActionResult RoleCreate()
         {
             return View();
@@ -54,6 +55,8 @@ namespace IdentityProject.Web.Areas.Admin.Controllers
             return View();
 
         }
+
+
 
         public async Task< IActionResult> RoleUpdate(string id)
         {
@@ -83,8 +86,8 @@ namespace IdentityProject.Web.Areas.Admin.Controllers
         }
 
 
-     /*
-      rol silmede sıkıntı var rol silinmiyor.
+      /*
+      rol silmede sıkıntı var rol silinmiyor.Parametredi Id null geliyor.
       */
 
         public async Task<IActionResult> RoleDelete(string roleId)
@@ -111,6 +114,64 @@ namespace IdentityProject.Web.Areas.Admin.Controllers
             TempData["SuccessMessage"] = "Rol silme işlemi başarılı.";
 
             return RedirectToAction(nameof(RoleController.Index));
-        } 
+        }
+
+
+       
+        public async Task<IActionResult> AssignRoleToUser(string Id)
+        {
+        
+            var currentUser =await _userManager.FindByIdAsync(Id);
+            ViewBag.UserId = Id;
+
+            var roles =await _roleManager.Roles.ToListAsync();
+
+            var userRoles = await _userManager.GetRolesAsync(currentUser!);  
+
+
+            var roleViewModelList = new List<AssignRoleToUserViewModel>();
+
+            foreach (var role in roles)
+            {
+                var assignRoleToUserViewModel = new AssignRoleToUserViewModel { Id = role.Id, Name = role.Name! };
+
+                if (userRoles.Contains(role.Name!))
+                {
+                    assignRoleToUserViewModel.Exist = true;
+                }
+                else
+                {
+                    assignRoleToUserViewModel.Exist = false;
+                }
+
+                roleViewModelList.Add(assignRoleToUserViewModel);
+            }
+
+            return View(roleViewModelList);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AssignRoleToUser(string UserId,List<AssignRoleToUserViewModel> requestList)
+        {
+           var UserToAssignRoles = await _userManager.FindByIdAsync(UserId);
+
+            foreach (var role in requestList)
+            {
+
+                if (role.Exist)
+                {
+                    await _userManager.AddToRoleAsync(UserToAssignRoles!, role.Name);
+                }
+                else
+                {
+                    await _userManager.RemoveFromRoleAsync(UserToAssignRoles!, role.Name);
+                }
+            }             
+
+            TempData["SuccessMessage"] = "Rol Ekleme işlemi başarılı";
+            
+
+            return View(requestList);
+        }
     }
 }

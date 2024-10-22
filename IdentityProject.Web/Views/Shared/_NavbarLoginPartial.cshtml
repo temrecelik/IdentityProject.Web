@@ -14,7 +14,9 @@
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                 @User.Identity.Name
             </a>
+
             <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                <li><a class="dropdown-item" asp-area="admin" asp-controller="home" asp-action="Index">Admin</a></li>
                 <li><a class="dropdown-item" asp-controller="Member" asp-action="Index">Profil</a></li>
                 <li><a class="dropdown-item" asp-controller="Member" asp-action="UserEdit">Profil Güncelle</a></li>
                 <li><a class="dropdown-item" asp-controller="Member" asp-action="PasswordChange">Şifre Değiştir</a></li>
