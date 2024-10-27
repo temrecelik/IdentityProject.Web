@@ -204,10 +204,29 @@ namespace IdentityProject.Web.Controllers
 		}
 
 
+		/*
+		  member controller'da login olan kullanıcılın cooki'sindeki claimları döndüren list ile bu sayfada 
+		  kullanıcın cookie'sindeki claimların key value çitflerini görebiliriz.Issuer değeri nereden otantike 
+		  olduğunu gösterir diyelimki facebook ile giriş yaptı o zaan Issuer değer facebook olur
+			*/
+		[HttpGet]
+		public  IActionResult Claims()
+		{
+			var userClaimList = User.Claims.Select(x => new ClaimViewModel()
+			{
+				Issuer=x.Issuer,
+				Type =x.Type,
+				Value = x.Value
+			}).ToList();
+
+
+			return View(userClaimList);
+		}
+
 		}
 
 		
-
+		
 
 	}
 

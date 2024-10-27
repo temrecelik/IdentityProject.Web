@@ -154,6 +154,7 @@ namespace IdentityProject.Web.Areas.Admin.Controllers
 
             return View(roleViewModelList);
         }
+
 		[Authorize(Roles = "role-action")]
 		[HttpPost]
         public async Task<IActionResult> AssignRoleToUser(string UserId,List<AssignRoleToUserViewModel> requestList)
@@ -166,7 +167,8 @@ namespace IdentityProject.Web.Areas.Admin.Controllers
 
                 if (role.Exist)
                 {
-					var result = await _userManager.AddToRoleAsync(UserToAssignRoles!, role.Name);
+                    await _userManager.RemoveFromRoleAsync(UserToAssignRoles!, role.Name);
+                    var result = await _userManager.AddToRoleAsync(UserToAssignRoles!, role.Name);
                     if (!result.Succeeded)
                     {
                         foreach (var error in result.Errors)
