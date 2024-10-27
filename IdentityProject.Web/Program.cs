@@ -56,6 +56,8 @@ builder.Services.ConfigureApplicationCookie(options =>
      çýkýþ yap butonu kullanýlan bir web sitesinde butonun yerine göre farklý sayfalara yönlendirme yapýlabilir.*/
     options.LogoutPath = new PathString("/Member/LogOut");
     
+    //Bir kullanýcý eriþimi olmayan bir sayfaya ulaþmak isterse AccessDenied sayfasýna yönlendirilir.
+    options.AccessDeniedPath = new PathString("/Member/AccessDenied");
     options.Cookie = cookieBuilder;
     options.ExpireTimeSpan = TimeSpan.FromDays(60);
     options.SlidingExpiration = true;

@@ -1,5 +1,6 @@
 ﻿using IdentityProject.Web.Areas.Admin.Models;
 using IdentityProject.Web.Models.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -7,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 namespace IdentityProject.Web.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles ="role-action")]
     public class HomeController : Controller
     {
         private readonly UserManager<User> _userManager;

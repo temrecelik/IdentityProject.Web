@@ -2,6 +2,27 @@
 @{
     ViewData["Title"] = "AccessDenied";
 }
+<style>
+body{
 
-<h1>AccessDenied</h1>
+color: black;
+}
 
+h1 {
+color: red;
+}
+
+h6{
+color: red;
+text-decoration: underline;
+}
+
+</style>
+
+    <div class="w3-display-middle">
+        <h1 class="w3-jumbo w3-animate-top w3-center">Access Denied</h1>
+       
+        <h3 class="w3-center w3-animate-right">@ViewBag.Message</h3>
+        <h3 class="w3-center w3-animate-zoom">🚫🚫🚫🚫</h3>
+        <h6 class="w3-center w3-animate-zoom">error code:403 forbidden</h6>
+    </div>

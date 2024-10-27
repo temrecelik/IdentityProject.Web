@@ -11,6 +11,7 @@ using System.Data;
 namespace IdentityProject.Web.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = "role-action")]
     public class RoleController : Controller
     {
         private readonly UserManager<User> _userManager;

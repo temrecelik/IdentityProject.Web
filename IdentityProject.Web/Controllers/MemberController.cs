@@ -199,6 +199,7 @@ namespace IdentityProject.Web.Controllers
 		 */
 		public  IActionResult AccessDenied(string returnUrl)
 		{
+			ViewBag.message = "Bu sayfaya erişim izniniz yoktur. Yetki almak için yönetici ile görüşünüz.";
 			return View();
 		}
 
