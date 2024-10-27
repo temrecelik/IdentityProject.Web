@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.FileProviders;
 using System.Collections.Generic;
 
@@ -191,6 +192,15 @@ namespace IdentityProject.Web.Controllers
 				
 
         }
+
+
+		/*
+		 Eğer ki bir kullanıcı erişimi olmayan bir sayfaya gitmeye çalışır ise AcessDenied sayfasına yönlendirilir.
+		 */
+		public  IActionResult AccessDenied(string returnUrl)
+		{
+			return View();
+		}
 
 
 		}

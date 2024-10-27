@@ -1,10 +1,12 @@
 ﻿using IdentityProject.Web.Areas.Admin.Models;
 using IdentityProject.Web.Models.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
+using System.Data;
 
 namespace IdentityProject.Web.Areas.Admin.Controllers
 {
@@ -32,12 +34,16 @@ namespace IdentityProject.Web.Areas.Admin.Controllers
             return View(Allroles);
         }
 
-
+        /*
+         Bu işlem ile sadece rolü role-action olan kullanıcılar giriş yaptıktan sonra bu sayfaya erişebilir.
+         */
+        [Authorize(Roles ="role-action")] 
         public IActionResult RoleCreate()
         {
             return View();
         }
 
+        [Authorize(Roles = "role-action")]
         [HttpPost]
         public async  Task<IActionResult> RoleCreate(RoleCreateViewModel roleCreateViewModel)
         {
@@ -57,7 +63,7 @@ namespace IdentityProject.Web.Areas.Admin.Controllers
         }
 
 
-
+        [Authorize(Roles = "role-action")]
         public async Task< IActionResult> RoleUpdate(string id)
         {
             var roleToUpdate = await _roleManager.FindByIdAsync(id);
@@ -70,6 +76,7 @@ namespace IdentityProject.Web.Areas.Admin.Controllers
 
         }
 
+        [Authorize(Roles = "role-action")]
         [HttpPost]
         public async Task<IActionResult> RoleUpdate(RoleUpdateViewModel roleUpdateViewModel) { 
             
@@ -86,10 +93,10 @@ namespace IdentityProject.Web.Areas.Admin.Controllers
         }
 
 
-      /*
-      rol silmede sıkıntı var rol silinmiyor.Parametredi Id null geliyor.
-      */
-
+        /*
+        rol silmede sıkıntı var rol silinmiyor.Parametredi Id null geliyor.
+        */
+        [Authorize(Roles = "role-action")]
         public async Task<IActionResult> RoleDelete(string roleId)
         {
             var roleToDelete = await _roleManager.FindByIdAsync(roleId);
@@ -117,8 +124,8 @@ namespace IdentityProject.Web.Areas.Admin.Controllers
         }
 
 
-       
-        public async Task<IActionResult> AssignRoleToUser(string Id)
+		[Authorize(Roles = "role-action")]
+		public async Task<IActionResult> AssignRoleToUser(string Id)
         {
         
             var currentUser =await _userManager.FindByIdAsync(Id);
@@ -139,36 +146,54 @@ namespace IdentityProject.Web.Areas.Admin.Controllers
                 {
                     assignRoleToUserViewModel.Exist = true;
                 }
-                else
-                {
-                    assignRoleToUserViewModel.Exist = false;
-                }
+               
 
                 roleViewModelList.Add(assignRoleToUserViewModel);
             }
 
             return View(roleViewModelList);
         }
-
-        [HttpPost]
+		[Authorize(Roles = "role-action")]
+		[HttpPost]
         public async Task<IActionResult> AssignRoleToUser(string UserId,List<AssignRoleToUserViewModel> requestList)
         {
            var UserToAssignRoles = await _userManager.FindByIdAsync(UserId);
 
-            foreach (var role in requestList)
+
+			foreach (var role in requestList)
             {
 
                 if (role.Exist)
                 {
-                    await _userManager.AddToRoleAsync(UserToAssignRoles!, role.Name);
-                }
+					var result = await _userManager.AddToRoleAsync(UserToAssignRoles!, role.Name);
+                    if (!result.Succeeded)
+                    {
+                        foreach (var error in result.Errors)
+                        {
+                            ModelState.AddModelError(string.Empty, error.Description);			
+						}
+						return View(requestList);
+					}
+					TempData["SuccessMessage"] = "Rol Ekleme işlemi başarılı";
+				}
                 else
                 {
-                    await _userManager.RemoveFromRoleAsync(UserToAssignRoles!, role.Name);
-                }
+
+					var result = await _userManager.RemoveFromRoleAsync(UserToAssignRoles!, role.Name);
+					if (!result.Succeeded)
+					{
+						foreach (var error in result.Errors)
+						{
+							ModelState.AddModelError(string.Empty, error.Description);
+						}
+						return View(requestList);
+					}
+
+					TempData["SuccessMessage"] = "Rol Ekleme işlemi başarılı";
+				}
             }             
 
-            TempData["SuccessMessage"] = "Rol Ekleme işlemi başarılı";
+           
             
 
             return View(requestList);
