@@ -25,6 +25,7 @@ builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<IClaimsTransformation,UserClaimProvider>();
 
 /*
+ Cliam Bazlý Yetkilendirme
  Claim bazlý yetkilendirme iþlemleri policy yapýlarý ile yapýlýr aþaðýdaki policy yapýsý gösterilmiþtir.Daha önceden
  kullanýcý giriþi yaptýðýnda cookie'de þehir bilgisininde tutulmasý için UserClaimProvider class'ýnda gerekli 
 düzenlemeleri yapmýþtýk.Þimdi is bu þehir bilgisini tutan claim'a göre policy oluþtururak claim bazlý yetkilendirme  

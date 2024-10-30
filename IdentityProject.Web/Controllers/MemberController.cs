@@ -223,7 +223,17 @@ namespace IdentityProject.Web.Controllers
 
 			return View(userClaimList);
 		}
-		 
+
+		/*
+		 Program.cs oluşturduğumuz policy ile kullanıcı giriş yaptığında oluşan cookide şehir bilgisi karabük olan
+		 kullanıcıyor but methodtan oluşan view sayfalarını görebilirler.
+		 */
+		[Authorize(Policy = "KarabükPolicy")]
+		[HttpGet]
+		public IActionResult PersonFromKarabuk()
+		{
+			return View();
+		}
 
 	}
 }

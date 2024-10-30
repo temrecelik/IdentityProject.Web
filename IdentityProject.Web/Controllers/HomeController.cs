@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.CodeAnalysis.CSharp;
 using System.Diagnostics;
+using System.Security.Claims;
 
 namespace IdentityProject.Web.Controllers
 {
@@ -120,6 +121,25 @@ namespace IdentityProject.Web.Controllers
 
             if (identityResult.Succeeded)
             {
+                /*Policy Bazlı Yetkilendirme için Kullanıcının üye oluş tarihini Claim Tablosuna Ekleme
+                 
+                Burada kullanıcı artık üye olmuştur  kullanıcının üye olma tarihininin 10 gün ilerisini claim tablosuna kaydedip
+                ücretli bir sayfayı yada özelliği 10 gün boyunca gösterebiliriz.Bu örnek bir business'dır.
+                Bu policy bazlı yetkilendirmedir.
+                */
+                var exchangeCliam = new Claim("ExchangeExpireDate", DateTime.Now.AddDays(10).ToString());
+                var user =await _UserManager.FindByNameAsync(signUpViewModel.UserName);
+                var claimResult =await _UserManager.AddClaimAsync(user!, exchangeCliam);
+
+                if (!claimResult.Succeeded)
+                {
+                    foreach(var error in claimResult.Errors)
+                    {
+                        ModelState.AddModelError(string.Empty, error.Description);
+                        return View();  
+                    }
+                }
+
                 //Temp Data ile Mesaj SignUp'ın Get haline taşınabilmektedir.
                 TempData["SuccessMessage"] = "Kayıt işlemi başarılı.";
 
