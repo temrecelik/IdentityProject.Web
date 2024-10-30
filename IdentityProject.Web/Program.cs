@@ -1,8 +1,10 @@
+using IdentityProject.Web.ClaimProvider;
 using IdentityProject.Web.Extensions;
 using IdentityProject.Web.Models;
 using IdentityProject.Web.Models.Entities;
 using IdentityProject.Web.OptionsModels;
 using IdentityProject.Web.Services;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.CodeAnalysis.Operations;
 using Microsoft.EntityFrameworkCore;
@@ -20,6 +22,23 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 );
 builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
 builder.Services.AddScoped<IEmailService, EmailService>();
+builder.Services.AddScoped<IClaimsTransformation,UserClaimProvider>();
+
+/*
+ Claim bazlý yetkilendirme iþlemleri policy yapýlarý ile yapýlýr aþaðýdaki policy yapýsý gösterilmiþtir.Daha önceden
+ kullanýcý giriþi yaptýðýnda cookie'de þehir bilgisininde tutulmasý için UserClaimProvider class'ýnda gerekli 
+düzenlemeleri yapmýþtýk.Þimdi is bu þehir bilgisini tutan claim'a göre policy oluþtururak claim bazlý yetkilendirme  
+yapacaðýz.Aþaðýdaki policynin adý KarabükPolicy'dir.Bu policy kullanýlýrsa giriþi kullanýcýn city claim'ýnýn deðeri 
+Karabük deðil ise bu policy ile yetkilendirilmiþ sayfalara eriþimez.Birden fazla þehir eklemek için bu þehirler
+3. ,4. parametre olarak verilebilir.
+ */
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("KarabükPolicy", policy =>
+    {
+        policy.RequireClaim("city", "Karabük");
+    }); 
+});
 
 /*Ýdentity ile ekleme iþlemi yapýlýrken kullanýlacak rules'lar burada ayarlanabilir.Bir Extention klasörü oluþturup burada 
   static bir class tanýmladýktan sonra  oluþturulan static methoda IServiceCollection türünden bir parametre vererek

@@ -139,7 +139,8 @@ namespace IdentityProject.Web.Controllers
 		[HttpPost]
 		public async Task<IActionResult> UserEdit(UserEditViewModel userEditViewModel)
 		{
-			if(!ModelState.IsValid) return View();
+            ViewBag.genderList = new SelectList(Enum.GetNames(typeof(Gender)));
+            if (!ModelState.IsValid) return View();
 
 			var currentUser =await _userManager.FindByNameAsync(User.Identity!.Name!);
 
@@ -222,11 +223,8 @@ namespace IdentityProject.Web.Controllers
 
 			return View(userClaimList);
 		}
-
-		}
-
-		
-		
+		 
 
 	}
+}
 
