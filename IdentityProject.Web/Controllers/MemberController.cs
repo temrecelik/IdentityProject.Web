@@ -225,8 +225,8 @@ namespace IdentityProject.Web.Controllers
 		}
 
 		/*
-		 Program.cs oluşturduğumuz policy ile kullanıcı giriş yaptığında oluşan cookide şehir bilgisi karabük olan
-		 kullanıcıyor but methodtan oluşan view sayfalarını görebilirler.
+		 Program.cs oluşturduğumuz policy ile kullanıcı giriş yaptığında oluşan cookideki city claim'ındaki şehir bilgisi 
+		karabük olan kullanıcılar bu end-pointten oluşan view sayfalarını görebilirler.
 		 */
 		[Authorize(Policy = "KarabükPolicy")]
 		[HttpGet]

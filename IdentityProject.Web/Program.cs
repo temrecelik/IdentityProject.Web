@@ -67,7 +67,7 @@ builder.Services.ConfigureApplicationCookie(options =>
 
     /*
      Login olmadan girilemeyen sayfalarýn url'ine girmeye çalýþýrsak  bu kod sayesinde identity bizi Belirlediðimiz bu login 
-     sayfasýna atacaktýr.
+     sayfasýna atacaktýr. Eðer login olupta eriþemediðimiz sayfalar varsa bu sefer AccessDenied sayfasýna atýlýrýz.
      */
     options.LoginPath = new PathString("/home/SignIn");
 

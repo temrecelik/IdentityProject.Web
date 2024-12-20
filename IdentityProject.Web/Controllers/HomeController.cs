@@ -106,8 +106,6 @@ namespace IdentityProject.Web.Controllers
                 return View();
                 
             }
-
-
             //itentity kütüphanesi ile createAsync direkt olarak database oluşturulan kaydı ekler.
             var identityResult = await _UserManager.CreateAsync(
                 new()
@@ -118,15 +116,21 @@ namespace IdentityProject.Web.Controllers
                 }
                 , signUpViewModel.Password);
 
-
-            if (identityResult.Succeeded)
-            {
-                /*Policy Bazlı Yetkilendirme için Kullanıcının üye oluş tarihini Claim Tablosuna Ekleme
-                 
-                Burada kullanıcı artık üye olmuştur  kullanıcının üye olma tarihininin 10 gün ilerisini claim tablosuna kaydedip
+               
+            /*Policy Bazlı Yetkilendirme için Kullanıcının üye oluş tarihini Claim Tablosuna Ekleme                  
+               *Burada kullanıcı artık üye olmuştur  kullanıcının üye olma tarihininin 10 gün ilerisini claim tablosuna kaydedip
                 ücretli bir sayfayı yada özelliği 10 gün boyunca gösterebiliriz.Bu örnek bir business'dır.
                 Bu policy bazlı yetkilendirmedir.
-                */
+
+               *Normalde kullanıcı giriş yaptığında identity user tablosundaki name, username, email gibi
+                bazı propertyleri claim olarak cooki'ye ekler. Eğer cookie'de ekstra bir claim tutmak istersek
+                kullanıcı üye olduğunda aşağıdaki gibi AddClaim işlemi yapmalıyız. Bu şekilde üye olan bir kullanıcı
+                giriş yaptığında artık onun için bir ExchangeExpireDate adında da bir claim oluşur ve cookie'ye
+                eklenir. Bu claim ile de bir policy bazlı yetkilendirme ya da claim bazlı yetkilendirme yapılabilir.       
+             */
+            if (identityResult.Succeeded)
+            {
+                //üye olma tarihini claim olarak alıyoruz kullanıcının cookie'sine ekleliyoruz.
                 var exchangeCliam = new Claim("ExchangeExpireDate", DateTime.Now.AddDays(10).ToString());
                 var user =await _UserManager.FindByNameAsync(signUpViewModel.UserName);
                 var claimResult =await _UserManager.AddClaimAsync(user!, exchangeCliam);
@@ -140,17 +144,16 @@ namespace IdentityProject.Web.Controllers
                     }
                 }
 
-                //Temp Data ile Mesaj SignUp'ın Get haline taşınabilmektedir.
+                //Temp Data ile Mesaj SignUp'ın GetRequest'ine taşınabilmektedir.
                 TempData["SuccessMessage"] = "Kayıt işlemi başarılı.";
 
                 return RedirectToAction(nameof(HomeController.SignUp)); 
             }
           
-
             foreach (IdentityError item in identityResult.Errors)
             {
                 ModelState.AddModelError(string.Empty, item.Description);
-                /*model state'e identity'nin kendi hataları eklenir Vieew tarafında asp-validation-summary="ModelOnly" ile 
+                /*model state'e identity'nin kendi hataları eklenir View tarafında asp-validation-summary="ModelOnly" ile 
                 bu hatalar yazdırılır.Viewmodeldaki kendi belirlediğimiz validationlar ise ModelOnly  seçili olduğu için 
                 burada çıkmaz all dersek çıkar. */
             }
