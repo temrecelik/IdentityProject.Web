@@ -3,8 +3,10 @@ using IdentityProject.Web.Extensions;
 using IdentityProject.Web.Models;
 using IdentityProject.Web.Models.Entities;
 using IdentityProject.Web.OptionsModels;
+using IdentityProject.Web.Requirements;
 using IdentityProject.Web.Services;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.CodeAnalysis.Operations;
 using Microsoft.EntityFrameworkCore;
@@ -24,6 +26,9 @@ builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("Emai
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<IClaimsTransformation,UserClaimProvider>();
 
+//policy bazlý yetkilendirme yaparkan yazýlan business kodu için dependancy injection
+builder.Services.AddScoped<IAuthorizationHandler, ExchangeExpirationRequirementHandler>();
+
 /*
  Cliam Bazlý Yetkilendirme
  Claim bazlý yetkilendirme iþlemleri policy yapýlarý ile yapýlýr aþaðýdaki policy yapýsý gösterilmiþtir.Daha önceden
@@ -38,7 +43,21 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy("KarabükPolicy", policy =>
     {
         policy.RequireClaim("city", "Karabük");
-    }); 
+    });
+
+
+    /*
+     *Policy Bazlý yetkilendirme
+      -Policy Bazlý yetkilendirmede de claim'lar kullanýlýr ancak claim'lar ile beraber bir business koduda vardýr.Bu business kodlarýný 
+       yazdýðýmýz class IAuthorizationRequirement interfacesini implemente etmelidir. Requirements klasöründe oluþturduðumuz class'ta 
+       policy bazlý yetkilendirme için business kodumuzu yazdýk.
+      -Artýk ExchangeExpireRequrirement classýndaki business kodu çalýþacak ve ExcahngePolicy isimli policy ile yetkilendirilmiþ sayfalara
+       business kodundaki koþulu saðlayan kiþiler eriþim yapabilecekl
+     */
+    options.AddPolicy("ExchangePolicy", policy => {
+        policy.AddRequirements(new ExchangeExpireRequirement());
+    });
+
 });
 
 /*Ýdentity ile ekleme iþlemi yapýlýrken kullanýlacak rules'lar burada ayarlanabilir.Bir Extention klasörü oluþturup burada 

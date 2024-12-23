@@ -21,7 +21,7 @@ namespace IdentityProject.Web.Requirements
         protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, ExchangeExpireRequirement requirement)
         {
 
-            if (context.User.HasClaim(x => x.Type == "ExchangeExpireDate")) { 
+            if (!context.User.HasClaim(x => x.Type == "ExchangeExpireDate")) { 
                 context.Fail();
                 return Task.CompletedTask;
             }

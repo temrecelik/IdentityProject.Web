@@ -225,6 +225,7 @@ namespace IdentityProject.Web.Controllers
 		}
 
 		/*
+		 Claim bazlı yetkilendirme
 		 Program.cs oluşturduğumuz policy ile kullanıcı giriş yaptığında oluşan cookideki city claim'ındaki şehir bilgisi 
 		karabük olan kullanıcılar bu end-pointten oluşan view sayfalarını görebilirler.
 		 */
@@ -234,6 +235,15 @@ namespace IdentityProject.Web.Controllers
 		{
 			return View();
 		}
+
+
+		/*
+		 Policy bazlı yetkilendirme örneği policy program.cs yazıldı
+		 */
+		[Authorize(Policy = "ExchangePolicy")]
+
+		[HttpGet]
+		public IActionResult ExpireTimeFifteenDayPage() { return View(); }
 
 	}
 }

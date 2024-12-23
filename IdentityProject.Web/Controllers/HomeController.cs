@@ -65,6 +65,7 @@ namespace IdentityProject.Web.Controllers
                 return View();
             }
 
+           
             /*3. parametre true ise kullanıcın bilgilerini cookie'de tutup tutmamaya yarar.RememberMe tiklenirse true döner
                  Version belirnenen süre boyunca kullanıcı bilgileri tarayıcı kapatılıp açılsa dahi cookie'de tutulur.
               4. parametre yanlış giriş ile ilgilidir. Eğer kullanıcı çok fazla yanlış giriş yaparsa identity özelliği olarak
@@ -74,23 +75,30 @@ namespace IdentityProject.Web.Controllers
             */
             var SignInResult =await _SignInManager.PasswordSignInAsync(user, signInViewModel.Password, signInViewModel.RememberMe, true);
 
-            if (SignInResult.Succeeded)
-            {
-                return Redirect(returnUrl!);
-            }
-
             if (SignInResult.IsLockedOut)
             {
-                ModelState.AddModelError(string.Empty,  "Sisteme 3 dakika boyunca giriş yapamazsınız" );
+                ModelState.AddModelError(string.Empty, "Sisteme 3 dakika boyunca giriş yapamazsınız");
                 return View();
             }
 
-            ModelState.AddModelError(string.Empty, $"Email veya şifre yanlış.Yanlış giriş sayısı : " +
+            if (!SignInResult.Succeeded)
+            {
+                ModelState.AddModelError(string.Empty, $"Email veya şifre yanlış.Yanlış giriş sayısı : " +
                 $"{await _UserManager.GetAccessFailedCountAsync(user)}");
-	             return View();
+                return View();
 
-		
-         }
+            }
+           
+            if(user.BirthDay.HasValue)
+            {
+                /*login olduktan sonra başarılı ise claims'lar ile tekrar bir signIn işlemi daha yaptırıyoruz ve User'ın Birthday
+                 property'si var ise claim olarak cookie'sine ekleniyor*/
+                    await _SignInManager.SignInWithClaimsAsync(user, signInViewModel.RememberMe, new[]
+                    {new Claim ("BirthDay" , user.BirthDay.Value.ToString())});
+            }
+
+             return Redirect(returnUrl!);    	
+        }
 
         public IActionResult SignUp()
         {
@@ -118,8 +126,8 @@ namespace IdentityProject.Web.Controllers
 
                
             /*Policy Bazlı Yetkilendirme için Kullanıcının üye oluş tarihini Claim Tablosuna Ekleme                  
-               *Burada kullanıcı artık üye olmuştur  kullanıcının üye olma tarihininin 10 gün ilerisini claim tablosuna kaydedip
-                ücretli bir sayfayı yada özelliği 10 gün boyunca gösterebiliriz.Bu örnek bir business'dır.
+               *Burada kullanıcı artık üye olmuştur  kullanıcının üye olma tarihininin 15 gün ilerisini claim tablosuna kaydedip
+                ücretli bir sayfayı yada özelliği 15 gün boyunca gösterebiliriz.Bu örnek bir business'dır.
                 Bu policy bazlı yetkilendirmedir.
 
                *Normalde kullanıcı giriş yaptığında identity user tablosundaki name, username, email gibi
@@ -131,7 +139,7 @@ namespace IdentityProject.Web.Controllers
             if (identityResult.Succeeded)
             {
                 //üye olma tarihini claim olarak alıyoruz kullanıcının cookie'sine ekleliyoruz.
-                var exchangeCliam = new Claim("ExchangeExpireDate", DateTime.Now.AddDays(10).ToString());
+                var exchangeCliam = new Claim("ExchangeExpireDate", DateTime.Now.AddDays(15).ToString());
                 var user =await _UserManager.FindByNameAsync(signUpViewModel.UserName);
                 var claimResult =await _UserManager.AddClaimAsync(user!, exchangeCliam);
 
