@@ -37,7 +37,7 @@
 ![image](https://github.com/user-attachments/assets/f9e75042-fa79-4d85-ba1f-e76b0543aad1)
 ![image](https://github.com/user-attachments/assets/78127713-650c-455c-a318-d82f4ca3f48a)
 
-<br></br><h2>Policy based authorization</h2>
+<br></br><h2>Policy Based Authorization</h2>
 ![image](https://github.com/user-attachments/assets/88f3dd4e-8a7b-494c-879f-4d12639278f7)
 ![image](https://github.com/user-attachments/assets/4f9d1057-0239-4850-b16d-ac42b323cfd8)
 ![image](https://github.com/user-attachments/assets/978571f9-f797-4122-9259-b76ec53bde92)
