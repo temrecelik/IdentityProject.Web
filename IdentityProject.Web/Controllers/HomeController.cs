@@ -92,7 +92,7 @@ namespace IdentityProject.Web.Controllers
             if(user.BirthDay.HasValue)
             {
                 /*login olduktan sonra başarılı ise claims'lar ile tekrar bir signIn işlemi daha yaptırıyoruz ve User'ın Birthday
-                 property'si var ise claim olarak cookie'sine ekleniyor*/
+                 property'si var ise claim olarak cookie'sine ekleniyor.*/
                     await _SignInManager.SignInWithClaimsAsync(user, signInViewModel.RememberMe, new[]
                     {new Claim ("BirthDay" , user.BirthDay.Value.ToString())});
             }

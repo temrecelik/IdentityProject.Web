@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.FileProviders;
 using System.Collections.Generic;
+using System.Security.Claims;
 
 namespace IdentityProject.Web.Controllers
 {
@@ -183,15 +184,24 @@ namespace IdentityProject.Web.Controllers
 				}
 			}
 
-				await _userManager.UpdateSecurityStampAsync(currentUser);
+					await _userManager.UpdateSecurityStampAsync(currentUser);
 					await _signInManager.SignOutAsync();
-					await _signInManager.SignInAsync(currentUser, true);
-
-					TempData["SuccessMessage"] = "Profil bilgileriniz güncellenmiştir.";
-					return View(userEditViewModel);
-
 				
 
+			if (userEditViewModel.BirthDate.HasValue)
+			{
+				await _signInManager.SignInWithClaimsAsync(currentUser, true, new[]
+				{ new Claim("BirthDay", currentUser.BirthDay!.Value.ToString()) });
+			}
+			else
+			{
+                await _signInManager.SignInAsync(currentUser, true);
+            }
+
+            
+            TempData["SuccessMessage"] = "Profil bilgileriniz güncellenmiştir.";
+					return View(userEditViewModel);
+            
         }
 
 
@@ -245,6 +255,12 @@ namespace IdentityProject.Web.Controllers
 		[HttpGet]
 		public IActionResult ExpireTimeFifteenDayPage() { return View(); }
 
-	}
+
+
+       [Authorize(Policy = "ViolancePagePolicy")]
+        [HttpGet]
+        public IActionResult ViolancePage() { return View(); }
+
+    }
 }
 

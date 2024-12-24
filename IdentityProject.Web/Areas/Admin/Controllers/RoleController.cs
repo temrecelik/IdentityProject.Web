@@ -38,13 +38,13 @@ namespace IdentityProject.Web.Areas.Admin.Controllers
         /*
          Bu işlem ile sadece rolü role-action olan kullanıcılar giriş yaptıktan sonra bu sayfaya erişebilir.
          */
-        [Authorize(Roles ="role-action")] 
+       // [Authorize(Roles ="role-action")] 
         public IActionResult RoleCreate()
         {
             return View();
         }
 
-        [Authorize(Roles = "role-action")]
+       // [Authorize(Roles = "role-action")]
         [HttpPost]
         public async  Task<IActionResult> RoleCreate(RoleCreateViewModel roleCreateViewModel)
         {
@@ -64,7 +64,7 @@ namespace IdentityProject.Web.Areas.Admin.Controllers
         }
 
 
-        [Authorize(Roles = "role-action")]
+        //[Authorize(Roles = "role-action")]
         public async Task< IActionResult> RoleUpdate(string id)
         {
             var roleToUpdate = await _roleManager.FindByIdAsync(id);
@@ -77,7 +77,7 @@ namespace IdentityProject.Web.Areas.Admin.Controllers
 
         }
 
-        [Authorize(Roles = "role-action")]
+       // [Authorize(Roles = "role-action")]
         [HttpPost]
         public async Task<IActionResult> RoleUpdate(RoleUpdateViewModel roleUpdateViewModel) { 
             
@@ -97,7 +97,7 @@ namespace IdentityProject.Web.Areas.Admin.Controllers
         /*
         rol silmede sıkıntı var rol silinmiyor.Parametredi Id null geliyor.
         */
-        [Authorize(Roles = "role-action")]
+        //[Authorize(Roles = "role-action")]
         public async Task<IActionResult> RoleDelete(string roleId)
         {
             var roleToDelete = await _roleManager.FindByIdAsync(roleId);
@@ -125,7 +125,7 @@ namespace IdentityProject.Web.Areas.Admin.Controllers
         }
 
 
-		[Authorize(Roles = "role-action")]
+		//[Authorize(Roles = "role-action")]
 		public async Task<IActionResult> AssignRoleToUser(string Id)
         {
         
@@ -155,7 +155,7 @@ namespace IdentityProject.Web.Areas.Admin.Controllers
             return View(roleViewModelList);
         }
 
-		[Authorize(Roles = "role-action")]
+		//[Authorize(Roles = "role-action")]
 		[HttpPost]
         public async Task<IActionResult> AssignRoleToUser(string UserId,List<AssignRoleToUserViewModel> requestList)
         {

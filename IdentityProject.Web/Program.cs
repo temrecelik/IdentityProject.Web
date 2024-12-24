@@ -3,7 +3,9 @@ using IdentityProject.Web.Extensions;
 using IdentityProject.Web.Models;
 using IdentityProject.Web.Models.Entities;
 using IdentityProject.Web.OptionsModels;
+using IdentityProject.Web.Permissions;
 using IdentityProject.Web.Requirements;
+using IdentityProject.Web.Seeds;
 using IdentityProject.Web.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
@@ -28,6 +30,7 @@ builder.Services.AddScoped<IClaimsTransformation,UserClaimProvider>();
 
 //policy bazlý yetkilendirme yaparkan yazýlan business kodu için dependancy injection
 builder.Services.AddScoped<IAuthorizationHandler, ExchangeExpirationRequirementHandler>();
+builder.Services.AddScoped<IAuthorizationHandler,ViolancePageReqirementHandler>();
 
 /*
  Cliam Bazlý Yetkilendirme
@@ -57,6 +60,14 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy("ExchangePolicy", policy => {
         policy.AddRequirements(new ExchangeExpireRequirement());
     });
+
+    //þiddet içerikli sayfaya yaþ kontrolü için kullanýlacak policy Bu policy'yi kullanan sayfada sýkýntý var hiç bir türlü 
+    //girilmiyor
+    options.AddPolicy("ViolancePagePolicy", policy =>
+    {
+        policy.AddRequirements(new ViolancePageRequirement() { ThresholdAge = 18});
+    });
+
 
 });
 
@@ -107,6 +118,18 @@ builder.Services.ConfigureApplicationCookie(options =>
 
 
 var app = builder.Build();
+
+
+/*
+ Bu scope ile üretilen nesnelere programda çalýþtýðýnda bir kere çalýþýr ve memory'den düþer. SeedData gibi
+ iþlemlerde kullanýlacak methodlar bu þekilde using bloðu içinde çaðrýlýp kullanýlabilir.
+ */
+using (var scope = app.Services.CreateScope())
+{
+    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<Role>>();
+    await PermissionSeed.Seed(roleManager);
+}
+
 
 
 /*

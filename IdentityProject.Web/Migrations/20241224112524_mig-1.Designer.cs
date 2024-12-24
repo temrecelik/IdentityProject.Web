@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace IdentityProject.Web.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20241012111403_initial")]
-    partial class initial
+    [Migration("20241224112524_mig-1")]
+    partial class mig1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -60,8 +60,10 @@ namespace IdentityProject.Web.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
+                    b.Property<DateTime?>("BirthDay")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("City")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ConcurrencyStamp")
@@ -74,6 +76,9 @@ namespace IdentityProject.Web.Migrations
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
+
+                    b.Property<byte?>("Gender")
+                        .HasColumnType("tinyint");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
@@ -97,6 +102,9 @@ namespace IdentityProject.Web.Migrations
 
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
+
+                    b.Property<string>("Picture")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
