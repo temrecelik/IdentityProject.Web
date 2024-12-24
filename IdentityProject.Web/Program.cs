@@ -68,6 +68,33 @@ builder.Services.AddAuthorization(options =>
         policy.AddRequirements(new ViolancePageRequirement() { ThresholdAge = 18});
     });
 
+    /*
+     Permission ile claim bazlý yetkilendirme yaparken eðer value yerin birden fazla value verirsek yani
+     diyelimki delete ve update verdik, kullanýcýnýn rolünde bu permission'dan birisi var ise bile o sayfaya ulaþabilir
+     Bu nedenle OrderDeleteSayfasý için permissionu sadece delete olarak belirlemek gereklidir.
+     */
+    options.AddPolicy("OrderReadPermission", policy =>
+    {
+        policy.RequireClaim("Permission", Permission.Order.Read);
+    });
+
+
+   ;
+
+    options.AddPolicy("Permission.Order.Delete", policy =>
+    {
+        policy.RequireClaim("Permission", Permission.Order.Delete);
+    });
+
+    options.AddPolicy("Permission.Order.Write", policy =>
+    {
+        policy.RequireClaim("Permission", Permission.Order.Write);
+    });
+
+    options.AddPolicy("Permission.Order.Update", policy =>
+    {
+        policy.RequireClaim("Permission", Permission.Order.Update);
+    });
 
 });
 

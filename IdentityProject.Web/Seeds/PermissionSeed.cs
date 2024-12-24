@@ -30,11 +30,68 @@ namespace IdentityProject.Web.Seeds
             {
                 await roleManager.CreateAsync(new Role() { Name = "BasicRole" });
                 var basicRole =await roleManager.FindByNameAsync("BasicRole");
-
-                await roleManager.AddClaimAsync(basicRole!,new Claim("Permission" ,Permission.Stock.Read));
-                await roleManager.AddClaimAsync(basicRole!, new Claim("Permission", Permission.Order.Read));
-                await roleManager.AddClaimAsync(basicRole!, new Claim("Permission", Permission.Catalog.Read));
+                await AddReadPermission(basicRole!,roleManager);
+              
             }
+
+            var hasAdvancedRole = await roleManager.RoleExistsAsync("AdvancedRole");
+
+            if (!hasAdvancedRole)
+            {
+                await roleManager.CreateAsync(new Role() { Name = "AdvancedRole" });
+                var AdvancedRole = await roleManager.FindByNameAsync("AdvancedRole");
+                await AddReadPermission(AdvancedRole!, roleManager);
+                await AddWritePermission(AdvancedRole!, roleManager);
+                await AddUpdatePermission(AdvancedRole!, roleManager);  
+
+            }
+
+
+            var hasAdminRole = await roleManager.RoleExistsAsync("AdminRole");
+
+            if (!hasAdminRole)
+            {
+                await roleManager.CreateAsync(new Role() { Name = "AdminRole" });
+                var AdminRole = await roleManager.FindByNameAsync("AdminRole");
+                await AddReadPermission(AdminRole!, roleManager);
+                await AddWritePermission(AdminRole!, roleManager);
+                await AddUpdatePermission(AdminRole!, roleManager);
+                await AddDeletePermission(AdminRole!, roleManager); 
+
+            }
+
+
         }
+
+        public static async Task AddReadPermission(Role role, RoleManager<Role> roleManager)
+        {
+            await roleManager.AddClaimAsync(role, new Claim("Permission", Permission.Stock.Read));
+            await roleManager.AddClaimAsync(role, new Claim("Permission", Permission.Order.Read));
+            await roleManager.AddClaimAsync(role, new Claim("Permission", Permission.Catalog.Read));
+        }
+
+        public static async Task AddWritePermission(Role role, RoleManager<Role> roleManager)
+        {
+            await roleManager.AddClaimAsync(role, new Claim("Permission", Permission.Stock.Write));
+            await roleManager.AddClaimAsync(role, new Claim("Permission", Permission.Order.Write));
+            await roleManager.AddClaimAsync(role, new Claim("Permission", Permission.Catalog.Write));
+        }
+
+        public static async Task AddUpdatePermission(Role role, RoleManager<Role> roleManager)
+        {
+            await roleManager.AddClaimAsync(role, new Claim("Permission", Permission.Stock.Update));
+            await roleManager.AddClaimAsync(role, new Claim("Permission", Permission.Order.Update));
+            await roleManager.AddClaimAsync(role, new Claim("Permission", Permission.Catalog.Update));
+        }
+
+        public static async Task AddDeletePermission(Role role, RoleManager<Role> roleManager)
+        {
+            await roleManager.AddClaimAsync(role, new Claim("Permission", Permission.Stock.Delete));
+            await roleManager.AddClaimAsync(role, new Claim("Permission", Permission.Order.Delete));
+            await roleManager.AddClaimAsync(role, new Claim("Permission", Permission.Catalog.Delete));
+        }
+
+
+
     }
 }

@@ -1,0 +1,35 @@
+﻿@using Microsoft.AspNetCore.Authorization
+
+@{
+    ViewData["Title"] = "Index";
+}
+@inject IAuthorizationService authorizationService
+
+<h1>Siparişler</h1>
+
+
+@if (authorizationService.AuthorizeAsync(User, "Permission.Order.Update").Result.Succeeded)
+{
+    <p style="display:inline">Sipariş Güncelleme İznine sahipsiniz.</p>
+    <button class="btn btn-primary"> Sipariş Güncelle</button>
+    <br /> <br />
+}
+
+
+@if (authorizationService.AuthorizeAsync(User, "Permission.Order.Write").Result.Succeeded)
+{
+    <p style="display:inline" >Sipariş Oluşturma İznine sahipsiniz.</p>
+    <button class="btn btn-primary"> Sipariş Oluştur</button>
+    <br /> <br />
+}
+
+
+@if (authorizationService.AuthorizeAsync(User, "Permission.Order.Delete").Result.Succeeded)
+{
+    <p style="display:inline">Sipariş Silme İznine Sahipsiniz</p>
+    <button class="btn btn-primary"> Sipariş Sil</button>
+    <br /> <br />
+}
+
+
+
